@@ -1,0 +1,42 @@
+.video-container {
+  width: 30vw;
+  height: 30vw;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-size: contain;
+  margin: 0 auto;
+}
+.flexed-text{
+  flex: 1 1 0;
+  padding: 60px;
+  font-family: sans-serif;
+  clear: both;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 2rem;
+}
+
+ .mat-dialog-container {
+   padding: 0 !important;
+ }
+@media only screen and (max-width: 600px) {
+  .video-container {
+    width: 50vw;
+    height: 70vw;
+    display: flex;
+    position: relative;
+    background-size: contain;
+  }
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  .video-container {
+    width: 93vw;
+    height: 87vw;
+    display: flex;
+    position: relative;
+    background-size: contain;
+  }
+}

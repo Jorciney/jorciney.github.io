@@ -1,0 +1,57 @@
+[
+  {
+    "label": "Levenswijsheid",
+    "color": "#ffc421",
+    "type": "quote"
+  },
+  {
+    "label": "Speel een spel",
+    "color": "#ee742b",
+    "type": "game"
+  },
+  {
+    "label": "Draai opnieuw",
+    "color": "#575756",
+    "type": "again"
+  },
+  {
+    "label": "Grappig filmpje",
+    "color": "#f5b0a3",
+    "type": "video"
+  },
+  {
+    "label": "Verrassing",
+    "color": "#30ccc8",
+    "type": "voucher"
+  },
+  {
+    "label": "Wist-je-datje",
+    "color": "#68b5c8",
+    "type": "quote"
+  },
+  {
+    "label": "Speel een spel",
+    "color": "#d73754",
+    "type": "game"
+  },
+  {
+    "label": "Levenswijsheid",
+    "color": "#ffc421",
+    "type": "quote"
+  },
+  {
+    "label": "Draai opnieuw",
+    "color": "#575756",
+    "type": "again"
+  },
+  {
+    "label": "Levenswijsheid",
+    "color": "#a8d0c0",
+    "type": "quote"
+  },
+  {
+    "label": "Grappig filmpje",
+    "color": "#f5b0a3",
+    "type": "video"
+  }
+]

@@ -1,0 +1,64 @@
+{
+  "journey": {
+    "tasks": [
+      {
+        "position": 0,
+        "taskowner": "TELENET",
+        "type": "GENERAL_NEW_PRODUCT",
+        "status": "COMPLETED",
+        "metadata": {}
+      },
+      {
+        "position": 5,
+        "taskowner": "USER",
+        "type": "APPOINTMENT_CREATE",
+        "status": "COMPLETED",
+        "metadata": {}
+      },
+      {
+        "position": 15,
+        "taskowner": "USER",
+        "type": "APPOINTMENT_PREPARE_PRODUCT_INSTALLATION",
+        "status": "ACTIVE",
+        "metadata": {}
+      },
+      {
+        "position": 10,
+        "taskowner": "USER",
+        "type": "APPOINTMENT_WHEEL_OF_FORTUNE",
+        "status": "ACTIVE",
+        "metadata": {}
+      },
+      {
+        "position": 20,
+        "taskowner": "TELENET",
+        "type": "APPOINTMENT_PRODUCT_INSTALLATION",
+        "status": "ACTIVE",
+        "metadata": {
+          "appointment-date": "2020-02-27T08:00:00.0+01:00"
+        }
+      },
+      {
+        "position": 35,
+        "taskowner": "USER",
+        "type": "PROFILE_CREATE_PID",
+        "status": "INACTIVE",
+        "metadata": {}
+      },
+      {
+        "position": 55,
+        "taskowner": "USER",
+        "type": "MOBILE_ACTIVE_SIM",
+        "status": "INACTIVE",
+        "metadata": {}
+      },
+      {
+        "position": 100,
+        "taskowner": "USER",
+        "type": "GENERAL_END_JOURNEY",
+        "status": "INACTIVE",
+        "metadata": {}
+      }
+    ]
+  }
+}

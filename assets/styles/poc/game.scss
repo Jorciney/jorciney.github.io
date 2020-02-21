@@ -1,0 +1,66 @@
+.game-container {
+  //width: 30vw;
+  //height: 30vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-size: contain;
+  margin: 0 auto;
+}
+.title-wacht-is{
+  position: absolute;
+  width: 67%;
+  top: -0.6rem;
+  text-align: center;
+  font-family: "Courier New", monospace !important;
+  left: 4.5em;
+}
+.game-sub-container{
+  width: 412px;
+  height: 799px;
+  background-image: url(/assets/img/camionette.png);
+  margin-top: -63px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.blockrain-game-holder canvas{
+  border-radius: 10px;
+}
+.blockrain-start-holder{
+  border-radius: 10px;
+}
+.game{
+  width: 263px;
+  height: 390px;
+  position: relative;
+  left: 73px;
+  top: 139px;
+}
+@media only screen and (max-width: 600px) {
+  .game-container {
+
+  }
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  .game-container {
+
+
+  }
+  .game-sub-container{
+    width: 396px;
+    height: 775px;
+    margin-top: -63px;
+  }
+  .game{
+    width: 245px;
+    height: 383px;
+    position: relative;
+    left: 73px;
+    top: 135px;
+  }
+  .title-wacht-is{
+    width: auto;
+  }
+}
