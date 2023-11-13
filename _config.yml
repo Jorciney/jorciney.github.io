@@ -23,7 +23,7 @@ description: >- # used by seo meta and the atom feed
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
-url: ""
+url: "https://jorciney.github.io"
 
 github:
   username: jorciney # change to your github username
@@ -73,7 +73,7 @@ theme_mode: # [light|dark]
 img_cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: https://www.google.com/url?sa=i&url=https%3A%2F%2Fbe.linkedin.com%2Fin%2Fjorciney&psig=AOvVaw3f942HoUFZxqDYuaDyOW6D&ust=1699943622358000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIiQ0M-twIIDFQAAAAAdAAAAABAE
+avatar: https://avatars.githubusercontent.com/u/17569984?v=4
 
 # boolean type, the global switch for TOC in posts.
 toc: true
