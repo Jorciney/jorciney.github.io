@@ -39,13 +39,7 @@ In this article, we will see how to use Nx to create a standalone Angular applic
 npx create-nx-workspace@latest my-new-app-name --preset=angular-standalone
 ``` 
 You will then be prompted with the following questions:
-```bash
-✔ Which bundler would you like to use? · esbuild
-✔ Default stylesheet format · scss
-✔ Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering)? · No
-✔ Test runner to use for end to end (E2E) tests · cypress
-✔ Enable distributed caching to make your CI faster · Yes
-```
+![2023-11-15_nx-create-app-questions.png](../../assets/posts/2023-11-15_nx-create-app-questions.png)
 
 ### Running the application
 Now that our application has been generated, we can run it using the following command:
@@ -61,3 +55,45 @@ nx lint # will run linting
 ```
 
 ### Folder structure
+``` 
+my-new-app-name
+├── README.md
+├── e2e
+│   ├── cypress.config.ts
+│   ├── project.json
+│   ├── src
+│   │   ├── e2e
+│   │   │   └── app.cy.ts
+│   │   ├── fixtures
+│   │   │   └── example.json
+│   │   └── support
+│   │       ├── app.po.ts
+│   │       ├── commands.ts
+│   │       └── e2e.ts
+│   └── tsconfig.json
+├── jest.config.ts
+├── jest.preset.js
+├── nx.json
+├── package-lock.json
+├── package.json
+├── project.json
+├── src
+│   ├── app
+│   │   ├── app.component.html
+│   │   ├── app.component.scss
+│   │   ├── app.component.spec.ts
+│   │   ├── app.component.ts
+│   │   ├── app.config.ts
+│   │   ├── app.routes.ts
+│   │   └── nx-welcome.component.ts
+│   ├── assets
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── main.ts
+│   ├── styles.scss
+│   └── test-setup.ts
+├── tsconfig.app.json
+├── tsconfig.editor.json
+├── tsconfig.json
+└── tsconfig.spec.json
+```
