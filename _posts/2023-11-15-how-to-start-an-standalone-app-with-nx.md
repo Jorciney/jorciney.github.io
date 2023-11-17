@@ -36,12 +36,28 @@ In this article, we will see how to use Nx to create a standalone Angular applic
 
 ### Generating the new Angular standalone application
 ```bash
- npx create-nx-workspace@latest my-new-app-name --preset=angular-standalone
+npx create-nx-workspace@latest my-new-app-name --preset=angular-standalone
+``` 
+You will then be prompted with the following questions:
+```bash
+✔ Which bundler would you like to use? · esbuild
+✔ Default stylesheet format · scss
+✔ Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering)? · No
+✔ Test runner to use for end to end (E2E) tests · cypress
+✔ Enable distributed caching to make your CI faster · Yes
 ```
 
 ### Running the application
-
+Now that our application has been generated, we can run it using the following command:
 ```bash
+cd my-new-app-name
 nx serve my-new-app-name
 ```
+### Running other configurations
+```bash
+nx e2e e2e # will run our cypress tests
+nx test # will run our unit tests
+nx lint # will run linting
+```
 
+### Folder structure
