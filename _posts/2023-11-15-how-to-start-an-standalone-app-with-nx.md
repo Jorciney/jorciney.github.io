@@ -1,6 +1,6 @@
 ---
 title: How to use Nx to create a Standalone Angular Application
-date: 2023-11-15 20:41:27 +0200
+date: 2023-11-15 20:41:27 +0100
 categories: [nx,angular]
 tags: [nx,angular,frontend]
 ---
