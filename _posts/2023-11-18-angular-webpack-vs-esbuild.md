@@ -51,12 +51,21 @@ But is it so fast? Lets find out!
 ### **Start** time
 First lets compare the time it takes to start the application. For this test, I'm using both applications with Nx. The application is a simple Angular created as shown [here](../how-to-start-an-standalone-app-with-nx).
 
-| Angular app using **Webpack**                                                                                                             | Angular app using **esbuild**                                                                             |
-|-------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
-| ![2023-11-18-ng-app-webpack-start-time.png](../../assets%2Fposts%2F2023-11-18-ng-app-webpack-start-time.png)| ![2023-11-18-ng-app-esbuild-start-time.png](../../assets/posts/2023-11-18-ng-app-esbuild-start-time.png) |
+| Angular app using **Webpack**                                                                                | Angular app using **esbuild**                                                                            |
+|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| ![2023-11-18-ng-app-webpack-start-time.png](../../assets%2Fposts%2F2023-11-18-ng-app-webpack-start-time.png) | ![2023-11-18-ng-app-esbuild-start-time.png](../../assets/posts/2023-11-18-ng-app-esbuild-start-time.png) |
+| Start time of 1.755 seconds                                                                                  | Start time of 1.249 seconds                                                                              |
 
 ### **Build** time
 
 | Angular app using **Webpack**                                                                                  | Angular app using **esbuild**                                                                                  |
 |----------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
 | ![2023-11-18-ng-app-webpack-build-time.png](../..%2Fassets%2Fposts%2F2023-11-18-ng-app-webpack-build-time.png) | ![2023-11-18-ng-app-esbuild-build-time.png](../..%2Fassets%2Fposts%2F2023-11-18-ng-app-esbuild-build-time.png) |
+| Where the build time is 5.303 seconds                                                                          | With esbuild we could build our application in only 1.765 seconds                                              |
+
+# Conclusion
+
+As you can see from the images above, esbuild is a lot faster than webpack.
+I believe the bigger the application, the bigger the difference will be.
+I'm not saying that webpack is bad, but if you are looking for a faster alternative, esbuild is the way to go.
+I'm sure looking forward to testing esbuild on a bigger application.
