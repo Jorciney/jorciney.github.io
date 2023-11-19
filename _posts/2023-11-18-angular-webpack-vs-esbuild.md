@@ -47,3 +47,16 @@ As they already say on their [website](https://esbuild.github.io/): esbuild is a
 But is it so fast? Lets find out!
 
 ## Speed comparison between Webpack and esbuild
+
+### **Start** time
+First lets compare the time it takes to start the application. For this test, I'm using both applications with Nx. The application is a simple Angular created as shown [here](../how-to-start-an-standalone-app-with-nx).
+
+| Angular app using **Webpack**                                                                                                             | Angular app using **esbuild**                                                                             |
+|-------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| ![2023-11-18-ng-app-webpack-start-time.png](../../assets%2Fposts%2F2023-11-18-ng-app-webpack-start-time.png)| ![2023-11-18-ng-app-esbuild-start-time.png](../../assets/posts/2023-11-18-ng-app-esbuild-start-time.png) |
+
+### **Build** time
+
+| Angular app using **Webpack**                                                                                  | Angular app using **esbuild**                                                                                  |
+|----------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
+| ![2023-11-18-ng-app-webpack-build-time.png](../..%2Fassets%2Fposts%2F2023-11-18-ng-app-webpack-build-time.png) | ![2023-11-18-ng-app-esbuild-build-time.png](../..%2Fassets%2Fposts%2F2023-11-18-ng-app-esbuild-build-time.png) |
