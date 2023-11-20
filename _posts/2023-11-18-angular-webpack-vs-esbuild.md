@@ -63,6 +63,12 @@ First lets compare the time it takes to start the application. For this test, I'
 | ![2023-11-18-ng-app-webpack-build-time.png](../..%2Fassets%2Fposts%2F2023-11-18-ng-app-webpack-build-time.png) | ![2023-11-18-ng-app-esbuild-build-time.png](../..%2Fassets%2Fposts%2F2023-11-18-ng-app-esbuild-build-time.png) |
 | Where the build time is 5.303 seconds                                                                          | With esbuild we could build our application in only 1.765 seconds                                              |
 
+
+### The main difference in config
+As you can see in the screenshot below the main difference between the two configs is the build executor.
+Both use the [`@angular-devkit/build-angular`](https://www.npmjs.com/package/@angular-devkit/build-angular), but esbuilder uses the `application` builder, while webpack uses the `browser` builder
+![2023-11-18-esbuild-vs-webpack-builder.png](../..%2Fassets%2Fposts%2F2023-11-18-esbuild-vs-webpack-builder.png)
+![2023-11-18-esbuild-vs-webpack-config.png](../..%2Fassets%2Fposts%2F2023-11-18-esbuild-vs-webpack-config.png)
 # Conclusion
 
 As you can see from the images above, esbuild is a lot faster than webpack.
