@@ -4,7 +4,7 @@ date: 2023-11-18 15:17:27 +0100
 categories: [builder,angular,tools]
 tags: [esbuild,webpack,builders,javascript,angular,frontend]
 ---
-[![Hits](https://hits.sh/jorciney.dev/posts/angular-webpack-vs-esbuild.svg)](https://hits.sh/jorciney.dev/posts/angular-webpack-vs-esbuild/)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjorciney.dev&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 # Angular webpack vs esbuild
 ## What is webpack?
 Webpack is a static module bundler for modern JavaScript applications. When webpack processes your application, it internally builds a dependency graph which maps every module your project needs and generates one or more bundles.
