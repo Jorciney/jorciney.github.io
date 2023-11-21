@@ -4,6 +4,7 @@ date: 2023-11-15 20:41:27 +0100
 categories: [nx,angular]
 tags: [nx,angular,frontend]
 ---
+[![Hits](https://hits.sh/jorciney.dev/posts/how-to-start-an-standalone-app-with-nx.svg)](https://hits.sh/jorciney.dev/posts/how-to-start-an-standalone-app-with-nx/)
 # Nx in a standalone Angular application
 
 Since the release of version [14.6.0](https://github.com/nrwl/nx/releases/tag/14.6.0), Nx has been able to generate Angular standalone applications.<br/>
