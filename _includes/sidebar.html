@@ -35,14 +35,31 @@
       </li>
       <!-- the real tabs -->
       {% for tab in site.tabs %}
-        <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
-          <a href="{{ tab.url | relative_url }}" class="nav-link">
-            <i class="fa-fw {{ tab.icon }}"></i>
-            {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
+        {% if tab.dropdown %}
+          <!-- dropdown menu -->
+          <li class="nav-item dropdown{% if tab.url == page.url %}{{ " active" }}{% endif %}">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-fw {{ tab.icon }}"></i>
+              {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
+              <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
+            </a>
+            <ul class="dropdown-menu">
+              {% for item in tab.dropdown %}
+                <li><a class="dropdown-item" href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% else %}
+          <!-- regular menu item -->
+          <li class="nav-item{% if tab.url == page.url %}{{ " active" }}{% endif %}">
+            <a href="{{ tab.url | relative_url }}" class="nav-link">
+              <i class="fa-fw {{ tab.icon }}"></i>
+              {% capture tab_name %}{{ tab.url | split: '/' }}{% endcapture %}
 
-            <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
-          </a>
-        </li>
+              <span>{{ site.data.locales[include.lang].tabs.[tab_name] | default: tab.title | upcase }}</span>
+            </a>
+          </li>
+        {% endif %}
         <!-- .nav-item -->
       {% endfor %}
     <li>
