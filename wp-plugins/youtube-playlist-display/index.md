@@ -2,9 +2,8 @@
 layout: post
 title: YouTube Playlist Display
 description: A powerful WordPress plugin to showcase YouTube channel playlists in beautiful horizontal scrolling galleries with customizable themes and colors.
-author: jorciney
-date: 2025-06-20 15:30:00 +0000
-categories: [WordPress, Plugins]
+date: 2024-06-20 15:30:00 +0000
+categories: [wordpress, plugins]
 tags: [wordpress, youtube, playlist, gallery, responsive, shortcode]
 pin: false
 math: false
