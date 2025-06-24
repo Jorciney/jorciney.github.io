@@ -20,7 +20,7 @@ Welcome to my collection of WordPress plugins! These are custom-built solutions 
 ### 🎥 YouTube Playlist Display
 Transform your WordPress site with stunning YouTube playlist galleries! Display your channel's playlists in beautiful, responsive horizontal scrolling layouts.
 
-[View Plugin Details →](/wp-plugins/youtube-playlist-display/){: .btn .btn-primary}
+[View Plugin Details →](/wp-plugins/display-youtube-playlists/){: .btn .btn-primary}
 
 ---
 

@@ -7,6 +7,6 @@ dropdown:
   - title: "WordPress Plugins Overview"
     url: "/wordpress-plugins/"
   - title: "YouTube Playlist Display"
-    url: "/wp-plugins/youtube-playlist-display/"
+    url: "/wp-plugins/display-youtube-playlists/"
 permalink: /wp-plugins-menu/
 ---

@@ -9,16 +9,16 @@ pin: false
 math: false
 mermaid: false
 image:
-  path: /assets/img/plugins/youtube-playlist-display-banner.jpg
+  path: /assets/img/plugins/display-youtube-playlists-banner.jpg
   alt: YouTube Playlist Display WordPress Plugin Banner
-permalink: /wp-plugins/youtube-playlist-display/
+permalink: /wp-plugins/display-youtube-playlists/
 ---
 
 # YouTube Playlist Display
 
 Transform your WordPress site with stunning YouTube playlist galleries! Display your channel's playlists in beautiful, responsive horizontal scrolling layouts that engage your visitors and showcase your video content professionally.
 
-![YouTube Playlist Display Demo](/assets/img/plugins/youtube-playlist-display-demo.gif){: .shadow}
+![YouTube Playlist Display Demo](/assets/img/plugins/display-youtube-playlists-demo.gif){: .shadow}
 _Beautiful horizontal scrolling gallery with hover effects and modal video player_
 
 ## ✨ Features
@@ -50,19 +50,19 @@ _Beautiful horizontal scrolling gallery with hover effects and modal video playe
 ## 📸 Screenshots
 
 ### Admin Configuration Panel
-![Admin Settings](/assets/img/plugins/youtube-playlist-display-admin.png){: .shadow}
+![Admin Settings](/assets/img/plugins/display-youtube-playlists-admin.png){: .shadow}
 _Clean, intuitive admin interface with real-time testing_
 
 ### Light Theme Gallery
-![Light Theme](/assets/img/plugins/youtube-playlist-display-light.png){: .shadow}
+![Light Theme](/assets/img/plugins/display-youtube-playlists-light.png){: .shadow}
 _Professional light theme perfect for corporate websites_
 
 ### Dark Theme Gallery
-![Dark Theme](/assets/img/plugins/youtube-playlist-display-dark.png){: .shadow}
+![Dark Theme](/assets/img/plugins/display-youtube-playlists-dark.png){: .shadow}
 _Modern dark theme ideal for creative portfolios_
 
 ### Mobile Responsive
-![Mobile View](/assets/img/plugins/youtube-playlist-display-mobile.png){: .shadow}
+![Mobile View](/assets/img/plugins/display-youtube-playlists-mobile.png){: .shadow}
 _Seamless mobile experience with touch-friendly controls_
 
 ## 🛠️ Installation
@@ -82,4 +82,4 @@ _Seamless mobile experience with touch-friendly controls_
 ### GitHub Installation
 ```bash
 cd /path/to/wordpress/wp-content/plugins/
-git clone https://github.com/jorciney/youtube-playlist-display.git
+git clone https://github.com/jorciney/display-youtube-playlists.git
