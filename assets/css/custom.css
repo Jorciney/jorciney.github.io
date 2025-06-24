@@ -87,7 +87,7 @@
     margin-left: 2rem;
     margin-top: 0.5rem;
   }
-  
+
   .nav-item.dropdown.show .dropdown-menu {
     display: block;
   }
@@ -102,6 +102,7 @@
   margin-left: auto;
   margin-right: 0.5rem;
   transition: transform 0.2s ease-in-out;
+  border-top: none;
   opacity: 0.7;
 }
 
