@@ -6,6 +6,13 @@
   position: relative;
 }
 
+.nav-item.dropdown .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .nav-item.dropdown .dropdown-menu {
   position: absolute;
   top: 0;
@@ -88,12 +95,17 @@
 
 /* Dropdown toggle arrow */
 .nav-item.dropdown .dropdown-toggle::after {
-  content: "▶";
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
+  content: "\f0da"; /* FontAwesome chevron-right */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 0.7rem;
+  margin-left: auto;
+  margin-right: 0.5rem;
   transition: transform 0.2s ease-in-out;
+  opacity: 0.7;
 }
 
 .nav-item.dropdown:hover .dropdown-toggle::after {
   transform: rotate(90deg);
+  opacity: 1;
 }
