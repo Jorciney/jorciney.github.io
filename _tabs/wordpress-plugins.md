@@ -1,6 +1,6 @@
 ---
 # the default layout is 'page'
-icon: fab fa-wordpress
+icon: fas fa-plug
 order: 5
 dropdown:
   - title: "YouTube Playlist Display"

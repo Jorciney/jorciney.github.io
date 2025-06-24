@@ -18,16 +18,37 @@
   z-index: 1000;
   display: none;
   margin-left: 0.5rem;
+  /* Add padding to create a hover bridge */
+  padding-left: 0.5rem;
+  margin-left: 0;
 }
 
-.nav-item.dropdown:hover .dropdown-menu,
+/* Show dropdown on hover with better targeting */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Keep dropdown visible when hovering over it */
 .nav-item.dropdown .dropdown-menu:hover {
   display: block;
 }
 
+/* Create invisible bridge to prevent dropdown from hiding */
+.nav-item.dropdown::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 0.5rem;
+  height: 100%;
+  background: transparent;
+  z-index: 999;
+}
+
 .nav-item.dropdown .dropdown-item {
   display: block;
-  width: 100%;
+  width: calc(100% - 0.5rem);
+  margin-left: 0.5rem;
   padding: 0.5rem 1rem;
   clear: both;
   font-weight: 400;
@@ -37,6 +58,7 @@
   white-space: nowrap;
   background-color: transparent;
   border: 0;
+  border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 }
 
