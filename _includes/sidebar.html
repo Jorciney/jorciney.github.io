@@ -37,7 +37,7 @@
       {% for tab in site.tabs %}
         {% if tab.dropdown %}
           <!-- dropdown menu -->
-          {% assign tab_url = tab.url | default: tab.url %}
+          {% assign tab_url = tab.url | default: tab.dropdown[0].url %}
           <li class="nav-item dropdown{% if tab_url == page.url %}{{ " active" }}{% endif %}">
             <a href="{{ tab_url | relative_url }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fa-fw {{ tab.icon }}"></i>

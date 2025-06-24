@@ -1,4 +1,6 @@
 ---
+layout: redirect
+redirect_to: /wordpress-plugins/
 icon: fab fa-wordpress
 order: 5
 dropdown:
@@ -6,5 +8,5 @@ dropdown:
     url: "/wordpress-plugins/"
   - title: "YouTube Playlist Display"
     url: "/wp-plugins/youtube-playlist-display/"
-redirect_to: "/wordpress-plugins/"
+permalink: /wp-plugins-menu/
 ---
