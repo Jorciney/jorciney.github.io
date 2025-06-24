@@ -2,7 +2,7 @@
 layout: post
 title: WordPress Plugins
 description: A collection of custom WordPress plugins designed to enhance your website with powerful features and seamless functionality.
-date: 2024-06-20 15:00:00 +0000
+date: 2025-06-20 15:00:00 +0000
 categories: [wordpress, plugins]
 tags: [wordpress, plugins]
 pin: true
