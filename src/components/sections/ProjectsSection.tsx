@@ -1,3 +1,5 @@
+'use client'
+
 import { projects } from '@/data/projects'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
