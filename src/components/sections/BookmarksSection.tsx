@@ -7,7 +7,7 @@ import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { RaindropBookmark } from '@/lib/types'
-import { formatBookmarkDate, getBookmarkDomain } from '@/lib/raindrop'
+import { formatBookmarkDate, getBookmarkDomain, getPublicBookmarks } from '@/lib/raindrop'
 
 export default function BookmarksSection() {
   const [bookmarks, setBookmarks] = useState<RaindropBookmark[]>([])
@@ -20,23 +20,17 @@ export default function BookmarksSection() {
     const fetchBookmarks = async () => {
       try {
         setLoading(true)
-        console.log('🔍 Client: Fetching bookmarks via API route...')
+        console.log('🔍 Client: Fetching bookmarks directly from Raindrop...')
         
-        // Call our API route instead of direct server function
-        const response = await fetch('/api/bookmarks?perpage=50')
+        // For static export, we need to use environment variables at build time
+        const collectionId = parseInt(process.env.NEXT_PUBLIC_RAINDROP_COLLECTION_ID || '0')
+        const bookmarksData = await getPublicBookmarks(collectionId, 0, 50)
         
-        if (!response.ok) {
-          throw new Error(`API responded with ${response.status}`)
-        }
-        
-        const data = await response.json()
-        setBookmarks(data.items || [])
-        
-        console.log(`✅ Client: Loaded ${data.items?.length || 0} bookmarks from ${data.source}`)
+        setBookmarks(bookmarksData)
+        console.log(`✅ Client: Loaded ${bookmarksData.length} bookmarks`)
         
       } catch (error) {
         console.error('❌ Client: Error loading bookmarks:', error)
-        // This shouldn't happen since our API route handles fallbacks
         setBookmarks([])
       } finally {
         setLoading(false)

@@ -34,10 +34,12 @@ const RAINDROP_BASE_URL = 'https://api.raindrop.io/rest/v1'
  */
 
 export async function getPublicBookmarks(collectionId: number = 0, page: number = 0, perpage: number = 25): Promise<RaindropBookmark[]> {
-  const isDebug = process.env.DEBUG_RAINDROP === 'true'
+  // Support both server-side and client-side environments
+  const isDebug = process.env.DEBUG_RAINDROP === 'true' || process.env.NEXT_PUBLIC_DEBUG_RAINDROP === 'true'
   
   try {
-    const token = process.env.RAINDROP_TOKEN
+    // For static export, we need to handle client-side environment variables
+    const token = process.env.RAINDROP_TOKEN || process.env.NEXT_PUBLIC_RAINDROP_TOKEN
     
     if (!token) {
       console.info('📚 No RAINDROP_TOKEN found - using mock data for demonstration')
