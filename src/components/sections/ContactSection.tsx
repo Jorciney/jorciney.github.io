@@ -1,3 +1,5 @@
+'use client'
+
 import { Mail, Phone, MapPin, Github, Linkedin, Twitter } from 'lucide-react'
 import Button from '@/components/ui/Button'
 
@@ -18,9 +20,9 @@ export default function ContactSection() {
     <section id="contact" className="py-20 px-4 bg-gray-50 dark:bg-slate-900">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">Let's Work Together</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">Let&apos;s Work Together</h2>
           <p className="text-xl text-gray-600 dark:text-gray-400">
-            I'm always interested in new opportunities and collaborations.
+            I&apos;m always interested in new opportunities and collaborations.
           </p>
         </div>
 
@@ -82,7 +84,7 @@ export default function ContactSection() {
                 <Mail size={48} className="mx-auto mb-4 text-blue-600 dark:text-blue-400" />
                 <h4 className="text-lg font-semibold mb-2">Ready to Connect?</h4>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  I'd love to hear about your project or opportunity. Let's start a conversation!
+                  I&apos;d love to hear about your project or opportunity. Let&apos;s start a conversation!
                 </p>
                 <Button
                   onClick={() => window.open('mailto:jorciney.dev@gmail.com?subject=Hello from your portfolio', '_blank')}

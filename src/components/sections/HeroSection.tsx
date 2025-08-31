@@ -87,16 +87,16 @@ export default function HeroSection() {
                 const developer = {'{'}
               </div>
               <div className={`mb-1 ml-4 ${animationStarted ? 'animate-typewriter' : 'opacity-0'}`} style={{ animationDelay: '1s' }}>
-                name: "Jorciney Dias Chaveiro",
+                name: &quot;Jorciney Dias Chaveiro&quot;,
               </div>
               <div className={`mb-1 ml-4 ${animationStarted ? 'animate-typewriter' : 'opacity-0'}`} style={{ animationDelay: '1.5s' }}>
-                role: "Technology Lead",
+                role: &quot;Technology Lead&quot;,
               </div>
               <div className={`mb-1 ml-4 ${animationStarted ? 'animate-typewriter' : 'opacity-0'}`} style={{ animationDelay: '2s' }}>
-                expertise: ["Angular", "AWS", "Leadership"],
+                expertise: [&quot;Angular&quot;, &quot;AWS&quot;, &quot;Leadership&quot;],
               </div>
               <div className={`mb-1 ml-4 ${animationStarted ? 'animate-typewriter' : 'opacity-0'}`} style={{ animationDelay: '2.5s' }}>
-                passion: "Building scalable solutions"
+                passion: &quot;Building scalable solutions&quot;
               </div>
               <div className={`${animationStarted ? 'animate-typewriter' : 'opacity-0'}`} style={{ animationDelay: '3s' }}>
                 {'};'}

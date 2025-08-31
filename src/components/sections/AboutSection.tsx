@@ -14,7 +14,7 @@ export default function AboutSection() {
             <h3 className="text-2xl font-semibold mb-4">Professional Summary</h3>
             <div className="space-y-4 text-gray-600 dark:text-gray-400">
               <p>
-                I'm a Technology Lead with over 9 years of experience in software development, 
+                I&apos;m a Technology Lead with over 9 years of experience in software development, 
                 specializing in building scalable, maintainable solutions using modern web technologies.
               </p>
               <p>

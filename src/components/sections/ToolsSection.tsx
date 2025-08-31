@@ -27,7 +27,7 @@ export default function ToolsSection() {
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">Developer Tools</h2>
           <p className="text-xl text-gray-600 dark:text-gray-400">
-            Open-source tools and libraries I've built to improve developer productivity and code quality.
+            Open-source tools and libraries I&apos;ve built to improve developer productivity and code quality.
           </p>
         </div>
         
