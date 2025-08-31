@@ -3,41 +3,110 @@ import { RaindropBookmark, RaindropCollection, RaindropResponse } from './types'
 const RAINDROP_CLIENT_ID = '68b4c6fbf7052835d3498526'
 const RAINDROP_BASE_URL = 'https://api.raindrop.io/rest/v1'
 
-// For public collections, we can use the public API without authentication
-// This will work for public collections only
+/*
+ * Raindrop.io API Integration
+ * 
+ * TROUBLESHOOTING GUIDE:
+ * 
+ * If you're seeing mock data instead of your real bookmarks:
+ * 
+ * 1. TOKEN ISSUES:
+ *    - Ensure RAINDROP_TOKEN is set in your .env file
+ *    - Token should be 36 characters long
+ *    - Get token from: https://app.raindrop.io/settings/integrations
+ *    - Create new "App", NOT just a test token
+ * 
+ * 2. AUTHENTICATION FAILURES (401 errors):
+ *    - Check that you're using the "Test Token" from your created app
+ *    - Verify the token hasn't expired
+ *    - Make sure you have bookmarks in your Raindrop.io account
+ * 
+ * 3. ALTERNATIVE SOLUTION - Static Export:
+ *    If API continues to fail, you can use static data:
+ *    - Go to https://app.raindrop.io/settings/backups
+ *    - Export bookmarks as JSON
+ *    - Replace mockBookmarks array below with your exported data
+ * 
+ * 4. DEBUGGING:
+ *    - Check browser console for error messages
+ *    - Look at Network tab to see API requests
+ *    - Set DEBUG_RAINDROP=true in .env for more logs
+ */
 
 export async function getPublicBookmarks(collectionId: number = 0, page: number = 0, perpage: number = 25): Promise<RaindropBookmark[]> {
+  const isDebug = process.env.DEBUG_RAINDROP === 'true'
+  
   try {
     const token = process.env.RAINDROP_TOKEN
-    const url = `${RAINDROP_BASE_URL}/raindrops/${collectionId}?page=${page}&perpage=${perpage}`
     
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
+    if (!token) {
+      console.info('📚 No RAINDROP_TOKEN found - using mock data for demonstration')
+      if (isDebug) {
+        console.log('💡 To use real bookmarks, add RAINDROP_TOKEN to your .env file')
+        console.log('💡 Get your token from: https://app.raindrop.io/settings/integrations')
+      }
+      return []
     }
     
-    // Add authorization header if token is available
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`
+    if (isDebug) {
+      console.log(`🔍 Attempting to fetch bookmarks from collection ${collectionId}`)
+      console.log(`🔑 Token length: ${token.length} characters`)
     }
+    
+    // Build URL with test token as query parameter (Raindrop.io test token method)
+    const baseUrl = `${RAINDROP_BASE_URL}/raindrops/${collectionId}`
+    const params = new URLSearchParams({
+      page: page.toString(),
+      perpage: perpage.toString(),
+      test_token: token
+    })
+    const url = `${baseUrl}?${params.toString()}`
     
     const response = await fetch(url, {
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       next: { revalidate: 3600 } // Cache for 1 hour
     })
 
     if (!response.ok) {
+      const errorText = await response.text()
+      
       if (response.status === 401) {
-        console.info('Raindrop API authentication required - add RAINDROP_TOKEN to .env file')
+        console.info('🚫 Raindrop API authentication failed - using mock data')
+        if (isDebug) {
+          console.log('❌ Authentication error details:', errorText)
+          console.log('💡 Troubleshooting steps:')
+          console.log('   1. Verify RAINDROP_TOKEN in .env file')
+          console.log('   2. Ensure token is from https://app.raindrop.io/settings/integrations')
+          console.log('   3. Create new "App" and use the "Test Token"')
+          console.log('   4. Make sure you have bookmarks in your account')
+        }
       } else {
-        console.info(`Raindrop API returned ${response.status} - falling back to mock data`)
+        console.info(`📚 Raindrop API returned ${response.status} - using mock data`)
+        if (isDebug) {
+          console.log('❌ API error:', errorText)
+        }
       }
+      
       return []
     }
 
     const data: RaindropResponse = await response.json()
+    const count = data.items?.length || 0
+    console.info(`✅ Successfully fetched ${count} bookmarks from Raindrop.io`)
+    
+    if (isDebug && count > 0) {
+      console.log('📖 Sample bookmark:', {
+        title: data.items![0].title,
+        tags: data.items![0].tags,
+        collection: data.items![0].collection?.title
+      })
+    }
+    
     return data.items || []
   } catch (error) {
-    console.info('Raindrop API unavailable - using mock data for demonstration')
+    console.info('Raindrop API error - using mock data for demonstration:', error)
     return []
   }
 }
@@ -45,19 +114,19 @@ export async function getPublicBookmarks(collectionId: number = 0, page: number 
 export async function getPublicCollections(): Promise<RaindropCollection[]> {
   try {
     const token = process.env.RAINDROP_TOKEN
-    const url = `${RAINDROP_BASE_URL}/collections`
     
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
+    if (!token) {
+      console.info('No RAINDROP_TOKEN found - skipping collections fetch')
+      return []
     }
     
-    // Add authorization header if token is available
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`
-    }
+    // Build URL with test token as query parameter
+    const url = `${RAINDROP_BASE_URL}/collections?test_token=${token}`
     
     const response = await fetch(url, {
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       next: { revalidate: 3600 } // Cache for 1 hour
     })
 
@@ -67,6 +136,7 @@ export async function getPublicCollections(): Promise<RaindropCollection[]> {
     }
 
     const data = await response.json()
+    console.info(`Successfully fetched ${data.items?.length || 0} collections from Raindrop.io`)
     return data.items || []
   } catch (error) {
     console.info('Error fetching collections - using default collections')
