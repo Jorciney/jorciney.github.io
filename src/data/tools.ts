@@ -9,10 +9,10 @@ export const tools: Tool[] = [
     category: 'analyzer',
     technologies: ['Node.js', 'TypeScript', 'Angular', 'AST'],
     links: [
-      { label: 'Download', url: '#', type: 'primary' },
-      { label: 'GitHub', url: '#', type: 'secondary' }
+      { label: 'GitHub', url: 'https://github.com/jorciney', type: 'primary' },
+      { label: 'NPM', url: 'https://www.npmjs.com/~jorciney', type: 'secondary' }
     ],
-    githubUrl: 'https://github.com/jorciney/angular-analyzer'
+    githubUrl: 'https://github.com/jorciney'
   },
   {
     id: 'micro-frontend-cli',
@@ -22,8 +22,8 @@ export const tools: Tool[] = [
     category: 'cli',
     technologies: ['Node.js', 'Webpack', 'Module Federation', 'Angular'],
     links: [
-      { label: 'Install', url: '#', type: 'primary' },
-      { label: 'Docs', url: '#', type: 'secondary' }
+      { label: 'GitHub', url: 'https://github.com/jorciney', type: 'primary' },
+      { label: 'Documentation', url: 'https://github.com/jorciney', type: 'secondary' }
     ],
     downloadUrl: 'npm install -g @jorciney/mf-cli'
   },
@@ -35,8 +35,8 @@ export const tools: Tool[] = [
     category: 'library',
     technologies: ['TypeScript', 'Web APIs', 'Performance'],
     links: [
-      { label: 'Install', url: '#', type: 'primary' },
-      { label: 'Documentation', url: '#', type: 'secondary' }
+      { label: 'GitHub', url: 'https://github.com/jorciney', type: 'primary' },
+      { label: 'NPM Package', url: 'https://www.npmjs.com/~jorciney', type: 'secondary' }
     ],
     downloadUrl: 'npm install @jorciney/performance-monitor'
   },
@@ -48,8 +48,8 @@ export const tools: Tool[] = [
     category: 'extension',
     technologies: ['TypeScript', 'VS Code API', 'Angular Language Server'],
     links: [
-      { label: 'Install Extension', url: '#', type: 'primary' },
-      { label: 'Marketplace', url: '#', type: 'secondary' }
+      { label: 'VS Code Marketplace', url: 'https://marketplace.visualstudio.com/', type: 'primary' },
+      { label: 'GitHub', url: 'https://github.com/jorciney', type: 'secondary' }
     ]
   }
 ]

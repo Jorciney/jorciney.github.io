@@ -55,9 +55,10 @@ export default function ProjectsSection() {
                       className="flex-1"
                       onClick={() => {
                         if (link.url.startsWith('#')) {
-                          // Handle internal links if needed
+                          const sectionId = link.url.replace('#', '')
+                          document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
                         } else {
-                          window.open(link.url, '_blank')
+                          window.open(link.url, '_blank', 'noopener,noreferrer')
                         }
                       }}
                     >
@@ -73,7 +74,11 @@ export default function ProjectsSection() {
         
         {/* View All Projects Button */}
         <div className="text-center mt-12">
-          <Button variant="secondary" size="lg">
+          <Button 
+            variant="secondary" 
+            size="lg"
+            onClick={() => window.open('https://github.com/jorciney', '_blank', 'noopener,noreferrer')}
+          >
             <Github size={20} className="mr-2" />
             View All Projects
           </Button>

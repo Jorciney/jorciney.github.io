@@ -8,8 +8,8 @@ export const projects: Project[] = [
     icon: '📱',
     technologies: ['Angular 17', 'Module Federation', 'AWS', 'Nx', 'GitLab CI/CD'],
     links: [
-      { label: 'Case Study', url: '/projects/telenet-microfrontend', type: 'primary' },
-      { label: 'Architecture', url: '/projects/telenet-architecture', type: 'secondary' }
+      { label: 'Learn More', url: 'https://www.telenet.be', type: 'primary' },
+      { label: 'GitHub', url: 'https://github.com/jorciney', type: 'secondary' }
     ],
     featured: true
   },
@@ -20,7 +20,7 @@ export const projects: Project[] = [
     icon: '⚖️',
     technologies: ['Angular 12', 'Java 11', 'Oracle SQL', 'Maven'],
     links: [
-      { label: 'View Details', url: '#', type: 'primary' }
+      { label: 'View Details', url: 'https://www.fednot.be', type: 'primary' }
     ],
     featured: true
   },
@@ -31,7 +31,7 @@ export const projects: Project[] = [
     icon: '📺',
     technologies: ['Angular 8', 'AEM', 'Java 8', 'Spring'],
     links: [
-      { label: 'View Project', url: '#', type: 'primary' }
+      { label: 'View Project', url: 'https://www.telenet.be/en/residential/tv', type: 'primary' }
     ],
     featured: true
   }

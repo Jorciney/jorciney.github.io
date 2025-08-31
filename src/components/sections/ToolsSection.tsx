@@ -84,9 +84,10 @@ export default function ToolsSection() {
                         className="flex-1"
                         onClick={() => {
                           if (link.url.startsWith('#')) {
-                            // Handle internal links if needed
+                            const sectionId = link.url.replace('#', '')
+                            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
                           } else {
-                            window.open(link.url, '_blank')
+                            window.open(link.url, '_blank', 'noopener,noreferrer')
                           }
                         }}
                       >
@@ -111,7 +112,12 @@ export default function ToolsSection() {
           <p className="text-gray-600 dark:text-gray-400">
             All tools are open-source and available on GitHub. Contributions and feedback are always welcome!
           </p>
-          <Button variant="secondary" size="lg" className="mt-4">
+          <Button 
+            variant="secondary" 
+            size="lg" 
+            className="mt-4"
+            onClick={() => window.open('https://github.com/jorciney', '_blank', 'noopener,noreferrer')}
+          >
             <ExternalLink size={16} className="mr-2" />
             View All on GitHub
           </Button>

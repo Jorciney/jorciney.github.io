@@ -1,3 +1,5 @@
+'use client'
+
 import { Github, Linkedin, Mail, Twitter } from 'lucide-react'
 
 export default function Footer() {
@@ -5,9 +7,9 @@ export default function Footer() {
   
   const socialLinks = [
     { icon: Github, href: 'https://github.com/jorciney', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/jorciney', label: 'LinkedIn' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/jorcineychaveiro', label: 'LinkedIn' },
     { icon: Twitter, href: 'https://twitter.com/jorciney', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:contact@jorciney.dev', label: 'Email' }
+    { icon: Mail, href: 'mailto:jorciney.dev@gmail.com', label: 'Email' }
   ]
   
   return (
@@ -27,24 +29,36 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#projects" className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                <button 
+                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
                   Projects
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#blog" className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                <button 
+                  onClick={() => document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
                   Blog
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#resume" className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                <button 
+                  onClick={() => document.getElementById('resume')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
                   Resume
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#contact" className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                <button 
+                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
                   Contact
-                </a>
+                </button>
               </li>
             </ul>
           </div>
