@@ -53,17 +53,22 @@ export async function getPublicBookmarks(collectionId: number = 0, page: number 
       console.log(`🔑 Token length: ${token.length} characters`)
     }
     
-    // Build URL with test token as query parameter (Raindrop.io test token method)
+    // Try Bearer token authentication first, then fallback to query parameter
     const baseUrl = `${RAINDROP_BASE_URL}/raindrops/${collectionId}`
     const params = new URLSearchParams({
       page: page.toString(),
-      perpage: perpage.toString(),
-      test_token: token
+      perpage: perpage.toString()
     })
     const url = `${baseUrl}?${params.toString()}`
     
+    if (isDebug) {
+      console.log('🌐 Making request to:', url)
+      console.log('🔐 Using Bearer token authentication')
+    }
+    
     const response = await fetch(url, {
       headers: {
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       next: { revalidate: 3600 } // Cache for 1 hour

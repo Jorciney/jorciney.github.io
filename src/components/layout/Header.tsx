@@ -16,14 +16,18 @@ export default function Header() {
     { href: '#about', label: 'About' },
     { href: '#projects', label: 'Projects' },
     { href: '#tools', label: 'Tools' },
-    { href: '#blog', label: 'Blog' },
-    { href: '#resume', label: 'Resume' },
     { href: '/bookmarks', label: 'Bookmarks' },
     { href: '#contact', label: 'Contact' }
   ]
 
-  const scrollToSection = (sectionId: string) => {
-    document.getElementById(sectionId.replace('#', ''))?.scrollIntoView({ behavior: 'smooth' })
+  const handleNavClick = (href: string) => {
+    if (href.startsWith('#')) {
+      // Hash link - scroll to section on current page
+      document.getElementById(href.replace('#', ''))?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      // Regular link - navigate to different page
+      window.location.href = href
+    }
     setIsMenuOpen(false)
   }
 
@@ -35,7 +39,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <button 
-            onClick={() => scrollToSection('#hero')}
+            onClick={() => handleNavClick('#hero')}
             className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
           >
             JDC
@@ -46,7 +50,7 @@ export default function Header() {
             {navLinks.map(link => (
               <button
                 key={link.href}
-                onClick={() => scrollToSection(link.href)}
+                onClick={() => handleNavClick(link.href)}
                 className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 {link.label}
@@ -84,7 +88,7 @@ export default function Header() {
               {navLinks.map(link => (
                 <button
                   key={link.href}
-                  onClick={() => scrollToSection(link.href)}
+                  onClick={() => handleNavClick(link.href)}
                   className="text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
                 >
                   {link.label}

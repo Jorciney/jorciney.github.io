@@ -7,7 +7,7 @@ import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { RaindropBookmark } from '@/lib/types'
-import { getPublicBookmarks, formatBookmarkDate, getBookmarkDomain, mockBookmarks } from '@/lib/raindrop'
+import { formatBookmarkDate, getBookmarkDomain } from '@/lib/raindrop'
 
 export default function BookmarksSection() {
   const [bookmarks, setBookmarks] = useState<RaindropBookmark[]>([])
@@ -20,19 +20,24 @@ export default function BookmarksSection() {
     const fetchBookmarks = async () => {
       try {
         setLoading(true)
-        // Try to fetch real bookmarks first
-        const realBookmarks = await getPublicBookmarks(0, 0, 50)
+        console.log('🔍 Client: Fetching bookmarks via API route...')
         
-        if (realBookmarks.length > 0) {
-          setBookmarks(realBookmarks)
-        } else {
-          // Fall back to mock data for demo purposes
-          setBookmarks(mockBookmarks)
+        // Call our API route instead of direct server function
+        const response = await fetch('/api/bookmarks?perpage=50')
+        
+        if (!response.ok) {
+          throw new Error(`API responded with ${response.status}`)
         }
+        
+        const data = await response.json()
+        setBookmarks(data.items || [])
+        
+        console.log(`✅ Client: Loaded ${data.items?.length || 0} bookmarks from ${data.source}`)
+        
       } catch (error) {
-        console.error('Error loading bookmarks:', error)
-        // Use mock data as fallback
-        setBookmarks(mockBookmarks)
+        console.error('❌ Client: Error loading bookmarks:', error)
+        // This shouldn't happen since our API route handles fallbacks
+        setBookmarks([])
       } finally {
         setLoading(false)
       }
