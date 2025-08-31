@@ -40,6 +40,21 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_RAINDROP_TOKEN: ${{ secrets.RAINDROP_TOKEN }}
+          NEXT_PUBLIC_RAINDROP_COLLECTION_ID: "0"
+          
+      - name: Debug - Check build output
+        run: |
+          echo "Checking if out directory exists..."
+          ls -la
+          if [ -d "out" ]; then
+            echo "✅ out directory found"
+            ls -la out/
+          else
+            echo "❌ out directory not found"
+            echo "Available directories:"
+            ls -la
+          fi
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
