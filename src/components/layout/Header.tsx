@@ -16,7 +16,7 @@ export default function Header() {
     { href: '#about', label: 'About' },
     { href: '#projects', label: 'Projects' },
     { href: '#tools', label: 'Tools' },
-    { href: 'bookmarks', label: 'Bookmarks' },
+    { href: '/bookmarks', label: 'Bookmarks' },
     { href: '#contact', label: 'Contact' }
   ]
 
@@ -39,7 +39,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <button
-            onClick={() => handleNavClick('/#hero')}
+            onClick={() => handleNavClick('#hero')}
             className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
           >
             JDC
@@ -50,7 +50,7 @@ export default function Header() {
             {navLinks.map(link => (
               <button
                 key={link.href}
-                onClick={() => handleNavClick('/'+link.href)}
+                onClick={() => handleNavClick(link.href)}
                 className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 {link.label}
@@ -88,7 +88,7 @@ export default function Header() {
               {navLinks.map(link => (
                 <button
                   key={link.href}
-                  onClick={() => handleNavClick('/'+ link.href)}
+                  onClick={() => handleNavClick(link.href)}
                   className="text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
                 >
                   {link.label}
