@@ -99,7 +99,7 @@ export default function AboutSection() {
                       </div>
                     )}
                     {exp.current && (
-                      <Badge className="mt-3" variant="default">
+                      <Badge className="mt-3" variant="success">
                         Current Position
                       </Badge>
                     )}

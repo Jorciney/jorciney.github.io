@@ -55,14 +55,16 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <Button 
               onClick={() => scrollToSection('contact')}
-              className="bg-white text-blue-600 hover:bg-blue-50"
+              size="lg"
+              className="bg-white text-blue-600 hover:bg-blue-50 shadow-lg shadow-white/20"
             >
               Get In Touch
             </Button>
             <Button 
               variant="outline" 
+              size="lg"
               onClick={() => scrollToSection('projects')}
-              className="border-white text-white hover:bg-white hover:text-blue-600"
+              className="border-2 border-white text-white hover:bg-white hover:text-blue-600 shadow-lg shadow-white/10"
             >
               View My Work
             </Button>

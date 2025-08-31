@@ -13,11 +13,11 @@ const categoryIcons = {
   analyzer: Wrench
 }
 
-const categoryColors = {
-  cli: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-  library: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-  extension: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-  analyzer: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+const categoryVariants = {
+  cli: 'success' as const,
+  library: 'default' as const,
+  extension: 'warning' as const,
+  analyzer: 'danger' as const
 }
 
 export default function ToolsSection() {
@@ -43,7 +43,7 @@ export default function ToolsSection() {
                       <span className="text-3xl">{tool.icon}</span>
                       <div>
                         <CardTitle className="text-xl">{tool.title}</CardTitle>
-                        <Badge className={`mt-1 ${categoryColors[tool.category]}`}>
+                        <Badge className="mt-1" variant={categoryVariants[tool.category]} size="sm">
                           <IconComponent size={12} className="mr-1" />
                           {tool.category.toUpperCase()}
                         </Badge>
@@ -111,7 +111,7 @@ export default function ToolsSection() {
           <p className="text-gray-600 dark:text-gray-400">
             All tools are open-source and available on GitHub. Contributions and feedback are always welcome!
           </p>
-          <Button variant="outline" className="mt-4">
+          <Button variant="secondary" size="lg" className="mt-4">
             <ExternalLink size={16} className="mr-2" />
             View All on GitHub
           </Button>

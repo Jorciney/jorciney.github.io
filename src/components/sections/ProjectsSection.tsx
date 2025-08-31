@@ -73,7 +73,7 @@ export default function ProjectsSection() {
         
         {/* View All Projects Button */}
         <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
+          <Button variant="secondary" size="lg">
             <Github size={20} className="mr-2" />
             View All Projects
           </Button>
