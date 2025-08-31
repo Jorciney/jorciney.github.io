@@ -51,3 +51,43 @@ export interface ContactForm {
   subject: string
   message: string
 }
+
+export interface RaindropBookmark {
+  _id: number
+  title: string
+  excerpt: string
+  note: string
+  type: string
+  cover: string
+  tags: string[]
+  domain: string
+  createdDate: string
+  lastUpdate: string
+  link: string
+  collection?: {
+    $id: number
+    title: string
+    color: string
+  }
+}
+
+export interface RaindropCollection {
+  _id: number
+  title: string
+  description: string
+  color: string
+  count: number
+  public: boolean
+  view: string
+  sort: number
+  expanded: boolean
+  createdDate: string
+  lastUpdate: string
+}
+
+export interface RaindropResponse {
+  result: boolean
+  items: RaindropBookmark[]
+  count: number
+  collectionId: number
+}

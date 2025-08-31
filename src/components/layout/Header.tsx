@@ -18,7 +18,7 @@ export default function Header() {
     { href: '#tools', label: 'Tools' },
     { href: '#blog', label: 'Blog' },
     { href: '#resume', label: 'Resume' },
-    { href: '#bookmarks', label: 'Bookmarks' },
+    { href: '/bookmarks', label: 'Bookmarks' },
     { href: '#contact', label: 'Contact' }
   ]
 

@@ -1,17 +1,16 @@
 'use client'
 
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react'
+import { Github, Linkedin, Mail } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
-  
+
   const socialLinks = [
     { icon: Github, href: 'https://github.com/jorciney', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/jorcineychaveiro', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com/jorciney', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:jorciney.dev@gmail.com', label: 'Email' }
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/jorciney', label: 'LinkedIn' },
+    { icon: Mail, href: 'mailto:jorciney.dias@gmail.com', label: 'Email' }
   ]
-  
+
   return (
     <footer className="bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -23,13 +22,13 @@ export default function Footer() {
               Technology Lead & Full Stack Developer specializing in Angular, Micro-Frontends, and AWS.
             </p>
           </div>
-          
+
           {/* Quick Links */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <button 
+                <button
                   onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
                   className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
@@ -37,7 +36,7 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <button 
+                <button
                   onClick={() => document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' })}
                   className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
@@ -45,7 +44,7 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <button 
+                <button
                   onClick={() => document.getElementById('resume')?.scrollIntoView({ behavior: 'smooth' })}
                   className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
@@ -53,7 +52,7 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <button 
+                <button
                   onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                   className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
@@ -62,7 +61,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          
+
           {/* Social Links */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Connect</h3>
@@ -82,7 +81,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        
+
         {/* Copyright */}
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
           <p className="text-gray-600 dark:text-gray-400">
