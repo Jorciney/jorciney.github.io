@@ -37,7 +37,10 @@ jobs:
         run: npm ci
         
       - name: Build with Next.js
-        run: npm run build
+        run: |
+          echo "Starting Next.js build..."
+          npm run build
+          echo "Build completed"
         env:
           NODE_ENV: production
           NEXT_PUBLIC_RAINDROP_TOKEN: ${{ secrets.RAINDROP_TOKEN }}
@@ -45,15 +48,22 @@ jobs:
           
       - name: Debug - Check build output
         run: |
+          echo "Current directory: $(pwd)"
           echo "Checking if out directory exists..."
           ls -la
           if [ -d "out" ]; then
             echo "✅ out directory found"
+            echo "Contents of out directory:"
             ls -la out/
+            echo "Total files in out: $(find out -type f | wc -l)"
           else
             echo "❌ out directory not found"
             echo "Available directories:"
             ls -la
+            echo "Checking .next directory:"
+            if [ -d ".next" ]; then
+              ls -la .next/
+            fi
           fi
           
       - name: Upload artifact
