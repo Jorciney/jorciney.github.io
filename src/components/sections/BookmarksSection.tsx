@@ -43,7 +43,7 @@ export default function BookmarksSection({
     setLoading(true)
     setError(null)
     try {
-      const fetchedBookmarks = await fetchPublicRaindrops(publicCollectionId, 0, 50)
+      const fetchedBookmarks = await fetchPublicRaindrops(publicCollectionId)
       setBookmarks(fetchedBookmarks)
       if (fetchedBookmarks.length === 0) {
         setError('No bookmarks found in this collection')
