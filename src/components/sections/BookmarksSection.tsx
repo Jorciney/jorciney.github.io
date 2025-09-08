@@ -9,6 +9,38 @@ import { Input } from '@/components/ui/Input'
 import { RaindropBookmark } from '@/lib/types'
 import { formatBookmarkDate, getBookmarkDomain, mockBookmarks } from '@/lib/raindrop'
 import { fetchPublicRaindrops } from '@/lib/raindrop-client'
+import '@/styles/bookmark-content.css'
+
+// Simple HTML sanitization for security
+function sanitizeHtml(html: string): string {
+  // Create a temporary div to parse HTML
+  const temp = document.createElement('div')
+  temp.innerHTML = html
+  
+  // Allow only safe tags and attributes
+  const allowedTags = ['img', 'br', 'p', 'span', 'strong', 'em', 'b', 'i']
+  const allowedAttributes = ['src', 'alt', 'title']
+  
+  // Remove script tags and event handlers
+  const elements = temp.querySelectorAll('*')
+  elements.forEach(el => {
+    // Remove disallowed tags
+    if (!allowedTags.includes(el.tagName.toLowerCase())) {
+      el.remove()
+      return
+    }
+    
+    // Remove disallowed attributes
+    Array.from(el.attributes).forEach(attr => {
+      if (!allowedAttributes.includes(attr.name.toLowerCase()) && 
+          !attr.name.startsWith('data-')) {
+        el.removeAttribute(attr.name)
+      }
+    })
+  })
+  
+  return temp.innerHTML
+}
 
 interface BookmarksSectionProps {
   initialBookmarks?: RaindropBookmark[]
@@ -199,8 +231,8 @@ export default function BookmarksSection({
                     </div>
                     
                     {bookmark.excerpt && (
-                      <CardDescription className="line-clamp-3">
-                        {bookmark.excerpt}
+                      <CardDescription className="line-clamp-3 bookmark-content">
+                        <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(bookmark.excerpt) }} />
                       </CardDescription>
                     )}
                   </CardHeader>

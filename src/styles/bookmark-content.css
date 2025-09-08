@@ -1,0 +1,36 @@
+/* Bookmark content HTML styling */
+.bookmark-content img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin: 8px auto;
+  display: block;
+}
+
+.bookmark-content br {
+  display: block;
+  margin-top: 8px;
+  content: '';
+}
+
+.bookmark-content p {
+  margin-bottom: 8px;
+}
+
+.bookmark-content strong,
+.bookmark-content b {
+  font-weight: 600;
+}
+
+.bookmark-content em,
+.bookmark-content i {
+  font-style: italic;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .bookmark-content img {
+    opacity: 0.9;
+  }
+}
