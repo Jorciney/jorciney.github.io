@@ -11,15 +11,26 @@ import { formatBookmarkDate, getBookmarkDomain, mockBookmarks } from '@/lib/rain
 import { fetchPublicRaindrops } from '@/lib/raindrop-client'
 import '@/styles/bookmark-content.css'
 
-// Simple HTML sanitization for security
-function sanitizeHtml(html: string): string {
-  // Create a temporary div to parse HTML
+// Extract image from HTML content
+function extractImageFromHtml(html: string): string | null {
+  const temp = document.createElement('div')
+  temp.innerHTML = html
+  const img = temp.querySelector('img')
+  return img?.getAttribute('src') || null
+}
+
+// Clean HTML by removing images (since we'll display them separately)
+function sanitizeAndCleanHtml(html: string): string {
   const temp = document.createElement('div')
   temp.innerHTML = html
   
+  // Remove all images since we'll display them separately
+  const images = temp.querySelectorAll('img')
+  images.forEach(img => img.remove())
+  
   // Allow only safe tags and attributes
-  const allowedTags = ['img', 'br', 'p', 'span', 'strong', 'em', 'b', 'i']
-  const allowedAttributes = ['src', 'alt', 'title']
+  const allowedTags = ['br', 'p', 'span', 'strong', 'em', 'b', 'i']
+  const allowedAttributes = ['title']
   
   // Remove script tags and event handlers
   const elements = temp.querySelectorAll('*')
@@ -39,7 +50,7 @@ function sanitizeHtml(html: string): string {
     })
   })
   
-  return temp.innerHTML
+  return temp.innerHTML.trim()
 }
 
 interface BookmarksSectionProps {
@@ -211,33 +222,61 @@ export default function BookmarksSection({
         {/* Bookmarks Grid */}
         {!loading && !error && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayedBookmarks.map((bookmark) => (
-                <Card key={bookmark._id} hover className="h-full flex flex-col">
-                  <CardHeader>
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex-1">
-                        <CardTitle className="text-lg line-clamp-2 mb-2">
-                          {bookmark.title}
-                        </CardTitle>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
-                          <Globe size={14} />
-                          <span>{getBookmarkDomain(bookmark.link)}</span>
-                          <Calendar size={14} className="ml-2" />
-                          <span>{formatBookmarkDate(bookmark.createdDate)}</span>
-                        </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {displayedBookmarks.map((bookmark) => {
+                const imageUrl = bookmark.excerpt ? extractImageFromHtml(bookmark.excerpt) : null
+                const cleanText = bookmark.excerpt ? sanitizeAndCleanHtml(bookmark.excerpt) : ''
+                
+                return (
+                  <Card key={bookmark._id} hover className="h-full overflow-hidden group hover:shadow-lg transition-all duration-300">
+                    <div className="flex h-full">
+                      {/* Left side - Image */}
+                      <div className="w-24 md:w-32 flex-shrink-0">
+                        {imageUrl ? (
+                          <div className="h-full relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700">
+                            <img
+                              src={imageUrl}
+                              alt={bookmark.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                          </div>
+                        ) : (
+                          <div className="h-full bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 flex items-center justify-center">
+                            <Globe size={32} className="text-blue-400 dark:text-blue-300 opacity-60" />
+                          </div>
+                        )}
                       </div>
-                      <Bookmark size={20} className="text-blue-600 dark:text-blue-400 flex-shrink-0" />
-                    </div>
-                    
-                    {bookmark.excerpt && (
-                      <CardDescription className="line-clamp-3 bookmark-content">
-                        <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(bookmark.excerpt) }} />
-                      </CardDescription>
-                    )}
-                  </CardHeader>
 
-                  <CardContent className="flex-1 flex flex-col justify-between">
+                      {/* Right side - Content */}
+                      <div className="flex-1 flex flex-col">
+                        <CardHeader className="pb-2">
+                          <div className="flex items-start justify-between mb-2">
+                            <CardTitle className="text-lg line-clamp-2 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                              {bookmark.title}
+                            </CardTitle>
+                            <Bookmark size={18} className="text-blue-500 dark:text-blue-400 flex-shrink-0 ml-2 opacity-70" />
+                          </div>
+                          
+                          <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3">
+                            <div className="flex items-center gap-1">
+                              <Globe size={12} />
+                              <span>{getBookmarkDomain(bookmark.link)}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Calendar size={12} />
+                              <span>{formatBookmarkDate(bookmark.createdDate)}</span>
+                            </div>
+                          </div>
+                          
+                          {cleanText && (
+                            <CardDescription className="text-sm line-clamp-3 bookmark-content">
+                              <div dangerouslySetInnerHTML={{ __html: cleanText }} />
+                            </CardDescription>
+                          )}
+                        </CardHeader>
+
+                        <CardContent className="pt-0 flex-1 flex flex-col justify-between">
                     {/* Tags */}
                     {bookmark.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-4">
@@ -282,19 +321,22 @@ export default function BookmarksSection({
                       </div>
                     )}
 
-                    {/* Action Button */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => window.open(bookmark.link, '_blank', 'noopener,noreferrer')}
-                    >
-                      <ExternalLink size={16} className="mr-2" />
-                      Visit Link
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                          {/* Action Button */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full mt-4"
+                            onClick={() => window.open(bookmark.link, '_blank', 'noopener,noreferrer')}
+                          >
+                            <ExternalLink size={14} className="mr-2" />
+                            Visit Link
+                          </Button>
+                        </CardContent>
+                      </div>
+                    </div>
+                  </Card>
+                )
+              })}
             </div>
 
             {/* Load More Button */}

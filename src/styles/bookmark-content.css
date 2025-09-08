@@ -1,36 +1,56 @@
-/* Bookmark content HTML styling */
-.bookmark-content img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin: 8px auto;
-  display: block;
+/* Bookmark content HTML styling for improved layout */
+.bookmark-content {
+  line-height: 1.5;
 }
 
 .bookmark-content br {
   display: block;
-  margin-top: 8px;
+  margin-top: 6px;
   content: '';
 }
 
 .bookmark-content p {
   margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.bookmark-content p:last-child {
+  margin-bottom: 0;
 }
 
 .bookmark-content strong,
 .bookmark-content b {
   font-weight: 600;
+  color: inherit;
 }
 
 .bookmark-content em,
 .bookmark-content i {
   font-style: italic;
+  color: inherit;
 }
 
-/* Dark mode adjustments */
+/* Clean up any remaining inline styles */
+.bookmark-content span {
+  color: inherit !important;
+  background: none !important;
+}
+
+/* Ensure proper text flow */
+.bookmark-content div {
+  line-height: inherit;
+}
+
+/* Dark mode text improvements */
 @media (prefers-color-scheme: dark) {
-  .bookmark-content img {
-    opacity: 0.9;
+  .bookmark-content {
+    color: rgb(156 163 175); /* text-gray-400 */
+  }
+}
+
+/* Light mode text improvements */
+@media (prefers-color-scheme: light) {
+  .bookmark-content {
+    color: rgb(107 114 128); /* text-gray-500 */
   }
 }
