@@ -1,26 +1,63 @@
 'use client'
 
-import { useState } from 'react'
-import { ExternalLink, Calendar, Tag, Bookmark, Globe, Search, Filter } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { ExternalLink, Calendar, Tag, Bookmark, Globe, Search, Filter, RefreshCw } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { RaindropBookmark } from '@/lib/types'
 import { formatBookmarkDate, getBookmarkDomain, mockBookmarks } from '@/lib/raindrop'
+import { fetchPublicRaindrops } from '@/lib/raindrop-client'
 
 interface BookmarksSectionProps {
   initialBookmarks?: RaindropBookmark[]
+  enableRuntimeFetch?: boolean
+  publicCollectionId?: string
 }
 
-export default function BookmarksSection({ initialBookmarks }: BookmarksSectionProps) {
+export default function BookmarksSection({ 
+  initialBookmarks, 
+  enableRuntimeFetch = false,
+  publicCollectionId 
+}: BookmarksSectionProps) {
   // Use initial bookmarks from server-side fetch, or fallback to mock data
-  const [bookmarks] = useState<RaindropBookmark[]>(
+  const [bookmarks, setBookmarks] = useState<RaindropBookmark[]>(
     initialBookmarks && initialBookmarks.length > 0 ? initialBookmarks : mockBookmarks
   )
+  const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [displayCount, setDisplayCount] = useState(6)
+
+  // Runtime fetching for public collections (optional)
+  useEffect(() => {
+    if (enableRuntimeFetch && publicCollectionId) {
+      fetchBookmarksRuntime()
+    }
+  }, [enableRuntimeFetch, publicCollectionId])
+
+  const fetchBookmarksRuntime = async () => {
+    if (!publicCollectionId) return
+    
+    setLoading(true)
+    try {
+      const fetchedBookmarks = await fetchPublicRaindrops(publicCollectionId)
+      if (fetchedBookmarks.length > 0) {
+        setBookmarks(fetchedBookmarks)
+      }
+    } catch (error) {
+      console.error('Failed to fetch bookmarks at runtime:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleRefresh = () => {
+    if (enableRuntimeFetch && publicCollectionId) {
+      fetchBookmarksRuntime()
+    }
+  }
 
   // Get all unique tags
   const allTags = Array.from(
@@ -61,15 +98,29 @@ export default function BookmarksSection({ initialBookmarks }: BookmarksSectionP
 
         {/* Search and Filter */}
         <div className="mb-8 space-y-4">
-          <div className="relative max-w-md mx-auto">
-            <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Search bookmarks..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+          <div className="flex items-center gap-4 max-w-md mx-auto">
+            <div className="relative flex-1">
+              <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search bookmarks..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            {enableRuntimeFetch && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                disabled={loading}
+                className="flex items-center gap-2"
+              >
+                <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+                {loading ? 'Loading...' : 'Refresh'}
+              </Button>
+            )}
           </div>
 
           {/* Tag Filter */}

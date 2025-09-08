@@ -23,9 +23,18 @@ async function getBookmarks() {
 export default async function BookmarksPage() {
   const bookmarks = await getBookmarks()
   
+  // Check if we should enable runtime fetching
+  // This requires the collection to be public in Raindrop
+  const enableRuntimeFetch = process.env.ENABLE_RUNTIME_FETCH === 'true'
+  const publicCollectionId = process.env.NEXT_PUBLIC_RAINDROP_COLLECTION_ID || process.env.RAINDROP_COLLECTION_ID
+  
   return (
     <div className="pt-16">
-      <BookmarksSection initialBookmarks={bookmarks} />
+      <BookmarksSection 
+        initialBookmarks={bookmarks}
+        enableRuntimeFetch={enableRuntimeFetch}
+        publicCollectionId={publicCollectionId}
+      />
     </div>
   )
 }
