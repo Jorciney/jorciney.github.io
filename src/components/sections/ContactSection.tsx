@@ -1,19 +1,18 @@
 'use client'
 
-import { Mail, Phone, MapPin, Github, Linkedin, Twitter } from 'lucide-react'
+import { Mail, MapPin, Github, Linkedin, Building2 } from 'lucide-react'
 import Button from '@/components/ui/Button'
 
 export default function ContactSection() {
   const contactInfo = [
-    { icon: Mail, label: 'Email', value: 'jorciney.dev@gmail.com', href: 'mailto:jorciney.dev@gmail.com' },
-    { icon: Phone, label: 'Phone', value: '+32 XXX XXX XXX', href: 'tel:+32xxxxxxxxx' },
-    { icon: MapPin, label: 'Location', value: 'Brussels, Belgium', href: null }
+    { icon: Mail, label: 'Email', value: 'jorciney.dias@gmail.com', href: 'mailto:jorciney.dias@gmail.com' },
+    { icon: MapPin, label: 'Location', value: 'Zemst, Belgium', href: null }
   ]
 
   const socialLinks = [
     { icon: Github, label: 'GitHub', href: 'https://github.com/jorciney' },
-    { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/jorcineychaveiro' },
-    { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/jorciney' }
+    { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/jorciney' },
+    { icon: Building2, label: 'LinkedIn', href: 'https://www.cleveruppsmarketing.be' }
   ]
 
   return (
@@ -40,7 +39,7 @@ export default function ContactSection() {
                     <div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
                       {href ? (
-                        <a 
+                        <a
                           href={href}
                           className="text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         >
@@ -78,7 +77,7 @@ export default function ContactSection() {
           {/* Contact Form Placeholder */}
           <div className="bg-white dark:bg-slate-800 rounded-lg p-8 shadow-sm">
             <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
-            
+
             <div className="space-y-6">
               <div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-center">
                 <Mail size={48} className="mx-auto mb-4 text-blue-600 dark:text-blue-400" />
@@ -87,7 +86,7 @@ export default function ContactSection() {
                   I&apos;d love to hear about your project or opportunity. Let&apos;s start a conversation!
                 </p>
                 <Button
-                  onClick={() => window.open('mailto:jorciney.dev@gmail.com?subject=Hello from your portfolio', '_blank')}
+                  onClick={() => window.open('mailto:jorciney.dias@gmail.com?subject=Hello from your portfolio: jorciney.dev', '_blank')}
                   className="w-full"
                 >
                   <Mail size={16} className="mr-2" />
