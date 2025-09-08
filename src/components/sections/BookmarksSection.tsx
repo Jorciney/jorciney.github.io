@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { ExternalLink, Calendar, Tag, Bookmark, Globe, Search, Filter, RefreshCw } from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card'
+import { Card } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -229,9 +229,9 @@ export default function BookmarksSection({
                 
                 return (
                   <Card key={bookmark._id} hover className="h-full overflow-hidden group hover:shadow-lg transition-all duration-300">
-                    <div className="flex h-full">
-                      {/* Left side - Image */}
-                      <div className="flex items-center justify-center p-3">
+                    <div className="p-4">
+                      {/* Image positioned at top-start */}
+                      <div className="float-left mr-3 mb-2">
                         <div className="w-16 h-16 flex-shrink-0">
                           {imageUrl ? (
                             <div className="w-full h-full relative overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 shadow-sm">
@@ -250,90 +250,92 @@ export default function BookmarksSection({
                         </div>
                       </div>
 
-                      {/* Right side - Content */}
-                      <div className="flex-1 flex flex-col">
-                        <CardHeader className="pb-2">
-                          <div className="flex items-start justify-between mb-2">
-                            <CardTitle className="text-lg line-clamp-2 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                              {bookmark.title}
-                            </CardTitle>
-                            <Bookmark size={18} className="text-blue-500 dark:text-blue-400 flex-shrink-0 ml-2 opacity-70" />
+                      {/* Content that wraps around and below the image */}
+                      <div className="overflow-hidden">
+                        {/* Title with bookmark icon */}
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="text-lg font-semibold line-clamp-2 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            {bookmark.title}
+                          </h3>
+                          <Bookmark size={18} className="text-blue-500 dark:text-blue-400 flex-shrink-0 ml-2 opacity-70" />
+                        </div>
+                        
+                        {/* Meta information */}
+                        <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3">
+                          <div className="flex items-center gap-1">
+                            <Globe size={12} />
+                            <span>{getBookmarkDomain(bookmark.link)}</span>
                           </div>
-                          
-                          <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3">
-                            <div className="flex items-center gap-1">
-                              <Globe size={12} />
-                              <span>{getBookmarkDomain(bookmark.link)}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Calendar size={12} />
-                              <span>{formatBookmarkDate(bookmark.createdDate)}</span>
-                            </div>
+                          <div className="flex items-center gap-1">
+                            <Calendar size={12} />
+                            <span>{formatBookmarkDate(bookmark.createdDate)}</span>
                           </div>
-                          
-                          {cleanText && (
-                            <CardDescription className="text-sm line-clamp-3 bookmark-content">
-                              <div dangerouslySetInnerHTML={{ __html: cleanText }} />
-                            </CardDescription>
-                          )}
-                        </CardHeader>
-
-                        <CardContent className="pt-0 flex-1 flex flex-col justify-between">
-                    {/* Tags */}
-                    {bookmark.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-4">
-                        {bookmark.tags.slice(0, 4).map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            size="sm"
-                            className="cursor-pointer"
-                            onClick={() => handleTagClick(tag)}
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                        {bookmark.tags.length > 4 && (
-                          <Badge variant="outline" size="sm">
-                            +{bookmark.tags.length - 4}
-                          </Badge>
+                        </div>
+                        
+                        {/* Description */}
+                        {cleanText && (
+                          <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 bookmark-content mb-4 clear-left">
+                            <div dangerouslySetInnerHTML={{ __html: cleanText }} />
+                          </div>
                         )}
-                      </div>
-                    )}
 
-                    {/* Collection */}
-                    {bookmark.collection && (
-                      <div className="mb-4">
-                        <Badge
-                          variant="outline"
-                          className="border-2"
-                          style={{ borderColor: bookmark.collection.color }}
-                        >
-                          {bookmark.collection.title}
-                        </Badge>
-                      </div>
-                    )}
+                        {/* Content section - positioned below the image */}
+                        <div className="clear-left space-y-3">
+                          {/* Tags */}
+                          {bookmark.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {bookmark.tags.slice(0, 4).map((tag) => (
+                                <Badge
+                                  key={tag}
+                                  variant="secondary"
+                                  size="sm"
+                                  className="cursor-pointer"
+                                  onClick={() => handleTagClick(tag)}
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
+                              {bookmark.tags.length > 4 && (
+                                <Badge variant="outline" size="sm">
+                                  +{bookmark.tags.length - 4}
+                                </Badge>
+                              )}
+                            </div>
+                          )}
 
-                    {/* Note */}
-                    {bookmark.note && (
-                      <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md">
-                        <p className="text-sm text-blue-800 dark:text-blue-200 italic">
-                          &quot;{bookmark.note}&quot;
-                        </p>
-                      </div>
-                    )}
+                          {/* Collection */}
+                          {bookmark.collection && (
+                            <div>
+                              <Badge
+                                variant="outline"
+                                className="border-2"
+                                style={{ borderColor: bookmark.collection.color }}
+                              >
+                                {bookmark.collection.title}
+                              </Badge>
+                            </div>
+                          )}
+
+                          {/* Note */}
+                          {bookmark.note && (
+                            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md">
+                              <p className="text-sm text-blue-800 dark:text-blue-200 italic">
+                                &quot;{bookmark.note}&quot;
+                              </p>
+                            </div>
+                          )}
 
                           {/* Action Button */}
                           <Button
                             variant="outline"
                             size="sm"
-                            className="w-full mt-4"
+                            className="w-full"
                             onClick={() => window.open(bookmark.link, '_blank', 'noopener,noreferrer')}
                           >
                             <ExternalLink size={14} className="mr-2" />
                             Visit Link
                           </Button>
-                        </CardContent>
+                        </div>
                       </div>
                     </div>
                   </Card>
