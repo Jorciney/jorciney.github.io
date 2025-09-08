@@ -55,6 +55,8 @@ jobs:
           fi
         env:
           NODE_ENV: production
+          RAINDROP_TOKEN: ${{ secrets.RAINDROP_TOKEN }}
+          RAINDROP_COLLECTION_ID: "0"
           NEXT_PUBLIC_RAINDROP_TOKEN: ${{ secrets.RAINDROP_TOKEN }}
           NEXT_PUBLIC_RAINDROP_COLLECTION_ID: "0"
           

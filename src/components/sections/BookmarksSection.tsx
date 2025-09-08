@@ -1,44 +1,26 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ExternalLink, Calendar, Tag, Bookmark, Globe, Search, Filter } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { RaindropBookmark } from '@/lib/types'
-import { formatBookmarkDate, getBookmarkDomain, getPublicBookmarks } from '@/lib/raindrop'
+import { formatBookmarkDate, getBookmarkDomain, mockBookmarks } from '@/lib/raindrop'
 
-export default function BookmarksSection() {
-  const [bookmarks, setBookmarks] = useState<RaindropBookmark[]>([])
-  const [loading, setLoading] = useState(true)
+interface BookmarksSectionProps {
+  initialBookmarks?: RaindropBookmark[]
+}
+
+export default function BookmarksSection({ initialBookmarks }: BookmarksSectionProps) {
+  // Use initial bookmarks from server-side fetch, or fallback to mock data
+  const [bookmarks] = useState<RaindropBookmark[]>(
+    initialBookmarks && initialBookmarks.length > 0 ? initialBookmarks : mockBookmarks
+  )
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [displayCount, setDisplayCount] = useState(6)
-
-  useEffect(() => {
-    const fetchBookmarks = async () => {
-      try {
-        setLoading(true)
-        console.log('🔍 Client: Fetching bookmarks directly from Raindrop...')
-        
-        // For static export, we need to use environment variables at build time
-        const collectionId = parseInt(process.env.NEXT_PUBLIC_RAINDROP_COLLECTION_ID || '0')
-        const bookmarksData = await getPublicBookmarks(collectionId, 0, 50)
-        
-        setBookmarks(bookmarksData)
-        console.log(`✅ Client: Loaded ${bookmarksData.length} bookmarks`)
-        
-      } catch (error) {
-        console.error('❌ Client: Error loading bookmarks:', error)
-        setBookmarks([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchBookmarks()
-  }, [])
 
   // Get all unique tags
   const allTags = Array.from(
@@ -116,19 +98,7 @@ export default function BookmarksSection() {
           )}
         </div>
 
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-12">
-            <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-              <span className="sr-only">Loading bookmarks...</span>
-            </div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading bookmarks...</p>
-          </div>
-        )}
-
         {/* Bookmarks Grid */}
-        {!loading && (
-          <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayedBookmarks.map((bookmark) => (
                 <Card key={bookmark._id} hover className="h-full flex flex-col">
@@ -225,7 +195,7 @@ export default function BookmarksSection() {
             )}
 
             {/* No Results */}
-            {filteredBookmarks.length === 0 && !loading && (
+            {filteredBookmarks.length === 0 && (
               <div className="text-center py-12">
                 <Bookmark size={48} className="mx-auto mb-4 text-gray-400" />
                 <h3 className="text-xl font-semibold mb-2">No bookmarks found</h3>
@@ -249,8 +219,6 @@ export default function BookmarksSection() {
                 </a>
               </p>
             </div>
-          </>
-        )}
       </div>
     </section>
   )
