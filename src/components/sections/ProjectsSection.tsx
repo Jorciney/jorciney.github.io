@@ -15,7 +15,7 @@ export default function ProjectsSection() {
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">Featured Projects</h2>
           <p className="text-xl text-gray-600 dark:text-gray-400">
-            A selection of projects I&apos;ve worked on, from enterprise solutions to innovative tools.
+            A selection of projects I&apos;ve worked on, from enterprise solutions to WordPress websites and digital platforms.
           </p>
         </div>
         
