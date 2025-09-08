@@ -6,6 +6,7 @@ export interface Project {
   technologies: string[]
   links: ProjectLink[]
   featured?: boolean
+  isClientProject?: boolean
 }
 
 export interface ProjectLink {

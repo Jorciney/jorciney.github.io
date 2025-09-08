@@ -4,7 +4,7 @@ import { projects } from '@/data/projects'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
-import { ExternalLink, Github } from 'lucide-react'
+import { ExternalLink, Github, Info } from 'lucide-react'
 
 export default function ProjectsSection() {
   const featuredProjects = projects.filter(project => project.featured)
@@ -46,27 +46,39 @@ export default function ProjectsSection() {
               </CardContent>
               
               <CardFooter>
-                <div className="flex gap-2 w-full">
-                  {project.links.map((link, index) => (
-                    <Button
-                      key={index}
-                      variant={link.type === 'primary' ? 'default' : 'outline'}
-                      size="sm"
-                      className="flex-1"
-                      onClick={() => {
-                        if (link.url.startsWith('#')) {
-                          const sectionId = link.url.replace('#', '')
-                          document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
-                        } else {
-                          window.open(link.url, '_blank', 'noopener,noreferrer')
-                        }
-                      }}
-                    >
-                      <ExternalLink size={16} className="mr-2" />
-                      {link.label}
-                    </Button>
-                  ))}
-                </div>
+                {project.isClientProject ? (
+                  <div className="w-full bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                    <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+                      <Info size={16} className="flex-shrink-0" />
+                      <span className="text-sm font-medium">Client Project</span>
+                    </div>
+                    <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
+                      This project was developed for a client and is not publicly accessible.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex gap-2 w-full">
+                    {project.links.map((link, index) => (
+                      <Button
+                        key={index}
+                        variant={link.type === 'primary' ? 'default' : 'outline'}
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => {
+                          if (link.url.startsWith('#')) {
+                            const sectionId = link.url.replace('#', '')
+                            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+                          } else {
+                            window.open(link.url, '_blank', 'noopener,noreferrer')
+                          }
+                        }}
+                      >
+                        <ExternalLink size={16} className="mr-2" />
+                        {link.label}
+                      </Button>
+                    ))}
+                  </div>
+                )}
               </CardFooter>
             </Card>
           ))}

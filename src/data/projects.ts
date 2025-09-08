@@ -11,7 +11,8 @@ export const projects: Project[] = [
       { label: 'Learn More', url: 'https://www.telenet.be', type: 'primary' },
       { label: 'GitHub', url: 'https://github.com/jorciney', type: 'secondary' }
     ],
-    featured: true
+    featured: true,
+    isClientProject: true
   },
   {
     id: 'notary-system',
@@ -22,7 +23,8 @@ export const projects: Project[] = [
     links: [
       { label: 'View Details', url: 'https://www.fednot.be', type: 'primary' }
     ],
-    featured: true
+    featured: true,
+    isClientProject: true
   },
   {
     id: 'digibox-ordering',
@@ -33,6 +35,7 @@ export const projects: Project[] = [
     links: [
       { label: 'View Project', url: 'https://www.telenet.be/en/residential/tv', type: 'primary' }
     ],
-    featured: true
+    featured: true,
+    isClientProject: true
   }
 ]
