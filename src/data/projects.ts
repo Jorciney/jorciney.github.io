@@ -27,8 +27,8 @@ export const projects: Project[] = [
     isClientProject: true
   },
   {
-    id: 'digibox-ordering',
-    title: 'Telenet DigiBox Ordering',
+    id: 'tvshop-ordering',
+    title: 'Telenet - TVShop',
     description: 'Angular application enabling customers to order products directly via Telenet digibox with seamless UX.',
     icon: '📺',
     technologies: ['Angular 8', 'AEM', 'Java 8', 'Spring'],
