@@ -16,7 +16,7 @@ export default function Header() {
     { href: '#about', label: 'About' },
     { href: '#projects', label: 'Projects' },
     { href: '#company', label: 'Company' },
-    { href: '#tools', label: 'Tools' },
+    { href: 'blog', label: 'Blog' },
     { href: 'bookmarks', label: 'Bookmarks' },
     { href: '#contact', label: 'Contact' }
   ]
