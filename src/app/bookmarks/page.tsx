@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import BookmarksSection from '@/components/sections/BookmarksSection'
-import { getPublicBookmarks } from '@/lib/raindrop'
 
 export const metadata: Metadata = {
   title: 'Bookmarks - Jorciney Dias Chaveiro',
@@ -8,31 +7,15 @@ export const metadata: Metadata = {
   keywords: 'bookmarks, resources, articles, tools, development, programming, technology',
 }
 
-// Fetch bookmarks at build time for static export
-async function getBookmarks() {
-  try {
-    const collectionId = parseInt(process.env.RAINDROP_COLLECTION_ID || '0')
-    const bookmarks = await getPublicBookmarks(collectionId, 0, 50)
-    return bookmarks
-  } catch (error) {
-    console.error('Error fetching bookmarks at build time:', error)
-    return []
-  }
-}
-
-export default async function BookmarksPage() {
-  const bookmarks = await getBookmarks()
-  
-  // Check if we should enable runtime fetching
-  // This requires the collection to be public in Raindrop
-  const enableRuntimeFetch = process.env.ENABLE_RUNTIME_FETCH === 'true'
-  const publicCollectionId = process.env.NEXT_PUBLIC_RAINDROP_COLLECTION_ID || process.env.RAINDROP_COLLECTION_ID
+export default function BookmarksPage() {
+  // Your public collection ID from https://raindrop.io/jorcineydias/dev-39074771
+  const publicCollectionId = '39074771'
   
   return (
     <div className="pt-16">
       <BookmarksSection 
-        initialBookmarks={bookmarks}
-        enableRuntimeFetch={enableRuntimeFetch}
+        initialBookmarks={[]} // Start with empty, will fetch at runtime
+        enableRuntimeFetch={true} // Enable runtime fetching for public collection
         publicCollectionId={publicCollectionId}
       />
     </div>

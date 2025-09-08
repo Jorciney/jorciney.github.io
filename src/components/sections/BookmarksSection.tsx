@@ -21,33 +21,38 @@ export default function BookmarksSection({
   enableRuntimeFetch = false,
   publicCollectionId 
 }: BookmarksSectionProps) {
-  // Use initial bookmarks from server-side fetch, or fallback to mock data
-  const [bookmarks, setBookmarks] = useState<RaindropBookmark[]>(
-    initialBookmarks && initialBookmarks.length > 0 ? initialBookmarks : mockBookmarks
-  )
-  const [loading, setLoading] = useState(false)
+  // Start with initial bookmarks (empty for runtime fetch)
+  const [bookmarks, setBookmarks] = useState<RaindropBookmark[]>(initialBookmarks || [])
+  const [loading, setLoading] = useState(enableRuntimeFetch) // Start loading if runtime fetch enabled
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [displayCount, setDisplayCount] = useState(6)
+  const [error, setError] = useState<string | null>(null)
 
   // Runtime fetching for public collections (optional)
   useEffect(() => {
     if (enableRuntimeFetch && publicCollectionId) {
       fetchBookmarksRuntime()
     }
-  }, [enableRuntimeFetch, publicCollectionId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run once on mount
 
   const fetchBookmarksRuntime = async () => {
     if (!publicCollectionId) return
     
     setLoading(true)
+    setError(null)
     try {
-      const fetchedBookmarks = await fetchPublicRaindrops(publicCollectionId)
-      if (fetchedBookmarks.length > 0) {
-        setBookmarks(fetchedBookmarks)
+      const fetchedBookmarks = await fetchPublicRaindrops(publicCollectionId, 0, 50)
+      setBookmarks(fetchedBookmarks)
+      if (fetchedBookmarks.length === 0) {
+        setError('No bookmarks found in this collection')
       }
-    } catch (error) {
-      console.error('Failed to fetch bookmarks at runtime:', error)
+    } catch (err) {
+      console.error('Failed to fetch bookmarks at runtime:', err)
+      setError('Failed to load bookmarks. Please try again later.')
+      // Fallback to mock data if fetch fails
+      setBookmarks(mockBookmarks)
     } finally {
       setLoading(false)
     }
@@ -149,7 +154,31 @@ export default function BookmarksSection({
           )}
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
+              <span className="sr-only">Loading bookmarks...</span>
+            </div>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading bookmarks from Raindrop.io...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <div className="text-center py-12">
+            <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+            {enableRuntimeFetch && (
+              <Button variant="outline" onClick={handleRefresh}>
+                Try Again
+              </Button>
+            )}
+          </div>
+        )}
+
         {/* Bookmarks Grid */}
+        {!loading && !error && (
+          <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayedBookmarks.map((bookmark) => (
                 <Card key={bookmark._id} hover className="h-full flex flex-col">
@@ -246,7 +275,7 @@ export default function BookmarksSection({
             )}
 
             {/* No Results */}
-            {filteredBookmarks.length === 0 && (
+            {filteredBookmarks.length === 0 && bookmarks.length > 0 && (
               <div className="text-center py-12">
                 <Bookmark size={48} className="mx-auto mb-4 text-gray-400" />
                 <h3 className="text-xl font-semibold mb-2">No bookmarks found</h3>
@@ -270,6 +299,8 @@ export default function BookmarksSection({
                 </a>
               </p>
             </div>
+          </>
+        )}
       </div>
     </section>
   )

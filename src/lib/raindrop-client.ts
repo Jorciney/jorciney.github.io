@@ -5,28 +5,37 @@ import { RaindropBookmark, RaindropResponse } from './types'
 
 const RAINDROP_PUBLIC_API = 'https://api.raindrop.io/rest/v1/raindrops'
 
-export async function fetchPublicRaindrops(collectionId: string | number): Promise<RaindropBookmark[]> {
+export async function fetchPublicRaindrops(collectionId: string | number, page: number = 0, perpage: number = 50): Promise<RaindropBookmark[]> {
   try {
     // Public collections can be accessed without authentication
     // The collection must be set to "public" in Raindrop.io settings
-    const url = `${RAINDROP_PUBLIC_API}/${collectionId}`
+    const params = new URLSearchParams({
+      page: page.toString(),
+      perpage: perpage.toString()
+    })
+    const url = `${RAINDROP_PUBLIC_API}/${collectionId}?${params}`
     
-    console.log('🔍 Fetching public bookmarks from Raindrop...')
+    console.log('🔍 Fetching public bookmarks from collection:', collectionId)
     
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
+      // Disable caching for runtime fetches to get latest data
+      cache: 'no-cache'
     })
 
     if (!response.ok) {
       console.error(`Raindrop API returned ${response.status}`)
+      // Try to get error details
+      const errorText = await response.text()
+      console.error('Error details:', errorText)
       return []
     }
 
     const data: RaindropResponse = await response.json()
-    console.log(`✅ Fetched ${data.items?.length || 0} public bookmarks`)
+    console.log(`✅ Fetched ${data.items?.length || 0} public bookmarks from collection ${collectionId}`)
     
     return data.items || []
   } catch (error) {
