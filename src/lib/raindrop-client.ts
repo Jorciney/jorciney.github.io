@@ -3,88 +3,93 @@
 
 import { RaindropBookmark } from './types'
 
-// Feed item interface (might differ from API format)
-interface FeedItem {
-  id?: number
-  _id?: number
-  title: string
-  excerpt?: string
-  description?: string
-  note?: string
-  type?: string
-  cover?: string
-  tags?: string[]
-  domain?: string
-  created?: string
-  createdDate?: string
-  lastUpdate?: string
-  link?: string
-  url?: string
-  collection?: {
-    $id: number
-    title: string
-    color?: string
-  }
-}
-
 export async function fetchPublicRaindrops(collectionId: string | number): Promise<RaindropBookmark[]> {
   try {
-    // Use the public feed endpoint which doesn't require authentication
-    // Format: https://raindrop.io/{username}/{collection-slug}-{collection-id}/feed
-    // For your collection: https://raindrop.io/jorcineydias/dev-39074771/feed
+    // Use the CORS-friendly bg.raindrop.io RSS endpoint
+    const feedUrl = `https://bg.raindrop.io/rss/public/${collectionId}`
     
-    let feedUrl: string
-    if (collectionId === '39074771' || collectionId === 39074771) {
-      // Your specific public collection
-      feedUrl = 'https://raindrop.io/jorcineydias/dev-39074771/feed'
-    } else {
-      // Generic format - might need adjustment for other collections
-      feedUrl = `https://raindrop.io/collection/${collectionId}/feed`
-    }
-    
-    console.log('🔍 Fetching public bookmarks from feed:', feedUrl)
+    console.log('🔍 Fetching public bookmarks from RSS feed:', feedUrl)
     
     const response = await fetch(feedUrl, {
       method: 'GET',
       headers: {
-        'Accept': 'application/json',
+        'Accept': 'application/rss+xml, text/xml',
       },
       // Disable caching for runtime fetches to get latest data
       cache: 'no-cache'
     })
 
     if (!response.ok) {
-      console.error(`Raindrop feed returned ${response.status}`)
+      console.error(`Raindrop RSS feed returned ${response.status}`)
       return []
     }
 
-    const data = await response.json()
-    console.log(`✅ Fetched ${data.items?.length || 0} public bookmarks from feed`)
+    const xmlText = await response.text()
+    console.log('📥 Retrieved RSS XML content')
     
-    // The feed format might be different from the API format
-    // Let's map it to our expected structure
-    const bookmarks = data.items?.map((item: FeedItem): RaindropBookmark => ({
-      _id: item.id || item._id || 0,
-      title: item.title,
-      excerpt: item.excerpt || item.description || '',
-      note: item.note || '',
-      type: item.type || 'link',
-      cover: item.cover || '',
-      tags: item.tags || [],
-      domain: item.domain || '',
-      createdDate: item.created || item.createdDate || new Date().toISOString(),
-      lastUpdate: item.lastUpdate || item.created || new Date().toISOString(),
-      link: item.link || item.url || '',
-      collection: item.collection ? {
-        $id: item.collection.$id,
-        title: item.collection.title,
-        color: item.collection.color || '#666666'
-      } : undefined
-    })) || []
+    // Parse XML using DOMParser (available in browsers)
+    const parser = new DOMParser()
+    const xmlDoc = parser.parseFromString(xmlText, 'text/xml')
     
+    // Check for parsing errors
+    const parserError = xmlDoc.querySelector('parsererror')
+    if (parserError) {
+      console.error('XML parsing error:', parserError.textContent)
+      return []
+    }
+    
+    // Extract items from RSS
+    const items = xmlDoc.querySelectorAll('item')
+    const bookmarks: RaindropBookmark[] = Array.from(items).map((item, index) => {
+      const title = item.querySelector('title')?.textContent || 'Untitled'
+      const link = item.querySelector('link')?.textContent || ''
+      const description = item.querySelector('description')?.textContent || ''
+      const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString()
+      
+      // Extract tags from category elements
+      const categories = item.querySelectorAll('category')
+      const tags = Array.from(categories).map(cat => cat.textContent || '').filter(Boolean)
+      
+      // Extract domain from link
+      let domain = ''
+      try {
+        domain = new URL(link).hostname.replace('www.', '')
+      } catch {
+        domain = 'unknown'
+      }
+      
+      // Convert pubDate to ISO string
+      let createdDate = new Date().toISOString()
+      try {
+        createdDate = new Date(pubDate).toISOString()
+      } catch {
+        console.warn('Could not parse date:', pubDate)
+      }
+      
+      return {
+        _id: index + 1, // Use index as ID since RSS doesn't have unique IDs
+        title,
+        excerpt: description,
+        note: '',
+        type: 'link',
+        cover: '',
+        tags,
+        domain,
+        createdDate,
+        lastUpdate: createdDate,
+        link,
+        collection: {
+          $id: parseInt(collectionId.toString()) || 0,
+          title: 'Dev Resources',
+          color: '#3B82F6'
+        }
+      }
+    })
+    
+    console.log(`✅ Parsed ${bookmarks.length} bookmarks from RSS feed`)
     return bookmarks
   } catch (error) {
-    console.error('Error fetching public raindrops from feed:', error)
+    console.error('Error fetching public raindrops from RSS feed:', error)
     return []
   }
 }
