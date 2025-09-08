@@ -231,21 +231,23 @@ export default function BookmarksSection({
                   <Card key={bookmark._id} hover className="h-full overflow-hidden group hover:shadow-lg transition-all duration-300">
                     <div className="flex h-full">
                       {/* Left side - Image */}
-                      <div className="w-24 md:w-32 flex-shrink-0">
-                        {imageUrl ? (
-                          <div className="h-full relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700">
-                            <img
-                              src={imageUrl}
-                              alt={bookmark.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                          </div>
-                        ) : (
-                          <div className="h-full bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 flex items-center justify-center">
-                            <Globe size={32} className="text-blue-400 dark:text-blue-300 opacity-60" />
-                          </div>
-                        )}
+                      <div className="flex items-center justify-center p-3">
+                        <div className="w-16 h-16 flex-shrink-0">
+                          {imageUrl ? (
+                            <div className="w-full h-full relative overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 shadow-sm">
+                              <img
+                                src={imageUrl}
+                                alt={bookmark.title}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                            </div>
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg flex items-center justify-center shadow-sm">
+                              <Globe size={24} className="text-blue-400 dark:text-blue-300 opacity-60" />
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       {/* Right side - Content */}
