@@ -82,17 +82,14 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                           prose-li:mb-2
                           prose-blockquote:border-l-4 prose-blockquote:border-blue-500 
                           prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:my-6
-                          prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-2 
-                          prose-code:py-1 prose-code:rounded prose-code:text-sm
-                          prose-code:before:content-none prose-code:after:content-none
-                          prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:text-gray-100
-                          prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:my-6
                           prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8
                           prose-table:my-6 prose-thead:border-b-2 prose-thead:border-gray-300 dark:prose-thead:border-gray-700
                           prose-th:text-left prose-th:py-2 prose-th:px-4
                           prose-td:py-2 prose-td:px-4 prose-tr:border-b prose-tr:border-gray-200 dark:prose-tr:border-gray-800
                           prose-strong:text-gray-900 dark:prose-strong:text-gray-100
-                          prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline">
+                          prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                          [&_pre]:!bg-gray-900 [&_pre]:!text-gray-100 [&_pre]:!border-gray-700
+                          [&_code]:!font-mono">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeRaw]}
@@ -107,7 +104,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                 // Custom code block rendering
                 pre: ({children, ...props}) => {
                   return (
-                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-6" {...props}>
+                    <pre className="!bg-gray-900 !text-gray-100 p-4 rounded-lg overflow-x-auto my-6 border border-gray-700" {...props}>
                       {children}
                     </pre>
                   )
@@ -118,12 +115,17 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                   const isInline = !className?.includes('language-')
                   if (isInline) {
                     return (
-                      <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm" {...props}>
+                      <code className="!bg-gray-100 dark:!bg-gray-800 !text-gray-900 dark:!text-gray-100 px-2 py-1 rounded text-sm font-mono" {...props}>
                         {children}
                       </code>
                     )
                   }
-                  return <code className={className} {...props}>{children}</code>
+                  // For code blocks inside pre tags
+                  return (
+                    <code className="!text-gray-100 font-mono" {...props}>
+                      {children}
+                    </code>
+                  )
                 },
                 // Custom table rendering for better styling
                 table: ({children, ...props}) => {
