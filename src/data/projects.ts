@@ -73,5 +73,18 @@ export const projects: Project[] = [
     ],
     featured: true,
     isClientProject: false
+  },
+  {
+    id: 'vacation-prep-assistant',
+    title: 'Vacation Prep Assistant',
+    description: 'AI-powered travel planning web application with custom packing lists, itinerary management, expense tracking, weather forecasts, and travel checklists. Built with React and Firebase.',
+    icon: '✈️',
+    technologies: ['React 19', 'TypeScript', 'Firebase', 'Tailwind CSS', 'Vite', 'React Query', 'Framer Motion'],
+    links: [
+      { label: 'Launch App', url: 'https://vacation-prep-assistant.web.app/', type: 'primary' },
+      { label: 'View Source', url: 'https://github.com/jorciney', type: 'secondary' }
+    ],
+    featured: true,
+    isClientProject: false
   }
 ]
