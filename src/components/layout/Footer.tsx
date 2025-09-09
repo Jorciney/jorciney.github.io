@@ -37,22 +37,6 @@ export default function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                >
-                  Blog
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => document.getElementById('resume')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                >
-                  Resume
-                </button>
-              </li>
-              <li>
-                <button
                   onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                   className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
