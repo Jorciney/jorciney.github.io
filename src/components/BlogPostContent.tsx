@@ -4,6 +4,9 @@ import { Calendar, Clock, ArrowLeft, Tag } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import { BlogPost } from '@/lib/types'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 
 interface BlogPostContentProps {
   post: BlogPost
@@ -68,24 +71,88 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
           </header>
 
           {/* Content */}
-          <div className="prose prose-lg dark:prose-invert max-w-none">
-            <div 
-              className="[&>h2]:text-2xl [&>h2]:font-bold [&>h2]:mt-8 [&>h2]:mb-4
-                         [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:mt-6 [&>h3]:mb-3
-                         [&>p]:mb-6 [&>p]:leading-relaxed
-                         [&>ul]:mb-6 [&>ul]:ml-6 [&>ul]:list-disc
-                         [&>ol]:mb-6 [&>ol]:ml-6 [&>ol]:list-decimal
-                         [&>li]:mb-2
-                         [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 
-                         [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:my-6
-                         [&>code]:bg-gray-100 [&>code]:dark:bg-gray-800 [&>code]:px-2 
-                         [&>code]:py-1 [&>code]:rounded [&>code]:text-sm
-                         [&>pre]:bg-gray-100 [&>pre]:dark:bg-gray-800 [&>pre]:p-4 
-                         [&>pre]:rounded-lg [&>pre]:overflow-x-auto [&>pre]:my-6
-                         whitespace-pre-line"
+          <div className="prose prose-lg dark:prose-invert max-w-none
+                          prose-headings:text-gray-900 dark:prose-headings:text-gray-100
+                          prose-h1:text-3xl prose-h1:font-bold prose-h1:mt-8 prose-h1:mb-4
+                          prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4
+                          prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-3
+                          prose-p:mb-6 prose-p:leading-relaxed
+                          prose-ul:mb-6 prose-ul:ml-6 
+                          prose-ol:mb-6 prose-ol:ml-6 
+                          prose-li:mb-2
+                          prose-blockquote:border-l-4 prose-blockquote:border-blue-500 
+                          prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:my-6
+                          prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-2 
+                          prose-code:py-1 prose-code:rounded prose-code:text-sm
+                          prose-code:before:content-none prose-code:after:content-none
+                          prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:text-gray-100
+                          prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:my-6
+                          prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8
+                          prose-table:my-6 prose-thead:border-b-2 prose-thead:border-gray-300 dark:prose-thead:border-gray-700
+                          prose-th:text-left prose-th:py-2 prose-th:px-4
+                          prose-td:py-2 prose-td:px-4 prose-tr:border-b prose-tr:border-gray-200 dark:prose-tr:border-gray-800
+                          prose-strong:text-gray-900 dark:prose-strong:text-gray-100
+                          prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              components={{
+                // Custom image rendering to handle relative paths
+                img: ({...props}) => {
+                  const src = typeof props.src === 'string' ? props.src : ''
+                  // Convert relative paths to absolute paths
+                  const absoluteSrc = src.startsWith('/') ? src : `/${src}`
+                  return <img {...props} src={absoluteSrc} alt={props.alt || ''} className="rounded-lg shadow-lg my-8 w-full" />
+                },
+                // Custom code block rendering
+                pre: ({children, ...props}) => {
+                  return (
+                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-6" {...props}>
+                      {children}
+                    </pre>
+                  )
+                },
+                // Custom inline code rendering
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                code: ({children, className, ...props}: any) => {
+                  const isInline = !className?.includes('language-')
+                  if (isInline) {
+                    return (
+                      <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm" {...props}>
+                        {children}
+                      </code>
+                    )
+                  }
+                  return <code className={className} {...props}>{children}</code>
+                },
+                // Custom table rendering for better styling
+                table: ({children, ...props}) => {
+                  return (
+                    <div className="overflow-x-auto my-6">
+                      <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700" {...props}>
+                        {children}
+                      </table>
+                    </div>
+                  )
+                },
+                th: ({children, ...props}) => {
+                  return (
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-100" {...props}>
+                      {children}
+                    </th>
+                  )
+                },
+                td: ({children, ...props}) => {
+                  return (
+                    <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-800" {...props}>
+                      {children}
+                    </td>
+                  )
+                }
+              }}
             >
               {post.content}
-            </div>
+            </ReactMarkdown>
           </div>
 
           {/* Footer */}
