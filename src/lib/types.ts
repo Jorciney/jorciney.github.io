@@ -3,6 +3,7 @@ export interface Project {
   title: string
   description: string
   icon: string
+  logo?: string
   technologies: string[]
   links: ProjectLink[]
   featured?: boolean

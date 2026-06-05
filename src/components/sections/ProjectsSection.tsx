@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { projects } from '@/data/projects'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
@@ -24,7 +25,17 @@ export default function ProjectsSection() {
             <Card key={project.id} hover className="h-full flex flex-col">
               <CardHeader>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="text-3xl">{project.icon}</span>
+                  {project.logo ? (
+                    <Image
+                      src={project.logo}
+                      alt={`${project.title} logo`}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 rounded-xl object-contain flex-shrink-0"
+                    />
+                  ) : (
+                    <span className="text-3xl">{project.icon}</span>
+                  )}
                   <CardTitle className="text-xl">{project.title}</CardTitle>
                 </div>
                 <CardDescription>
