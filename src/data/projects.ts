@@ -75,6 +75,31 @@ export const projects: Project[] = [
     isClientProject: false
   },
   {
+    id: 'cleverbooking',
+    title: 'CleverBooking',
+    description: 'All-in-one SaaS booking platform for service businesses (salons, clinics, spas). A single admin dashboard plus a branded customer booking page covering appointments, CRM & segments, staff & roles, multi-location, Stripe payments, and analytics across 12 integrated modules. Features Google Meet video bookings, a WhatsApp AI booking bot, an embeddable widget, and a fully localized 5-language experience.',
+    icon: '📅',
+    technologies: ['SaaS', 'Multi-tenant', 'Stripe', 'WhatsApp API', 'Google Meet', 'i18n (5 languages)'],
+    links: [
+      { label: 'Visit Website', url: 'https://www.clever-booking.com', type: 'primary' },
+      { label: 'Open the App', url: 'https://business.clever-booking.com/admin', type: 'secondary' }
+    ],
+    featured: true,
+    isClientProject: false
+  },
+  {
+    id: 'salunas',
+    title: 'Salunas — Salon Marketplace',
+    description: 'Consumer marketplace for discovering and booking beauty & wellness salons across Belgium, built on top of CleverBooking. Smart search by service, location, and booking mode (in-person, mobile, or online), real-time availability, and instant booking that flows straight into the salon’s CleverBooking dashboard.',
+    icon: '💇',
+    technologies: ['Marketplace', 'Real-time Booking', 'Geo Search', 'SEO', 'i18n', 'Multi-country'],
+    links: [
+      { label: 'Visit Website', url: 'https://www.salunas.com', type: 'primary' }
+    ],
+    featured: true,
+    isClientProject: false
+  },
+  {
     id: 'vacation-prep-assistant',
     title: 'Vacation Prep Assistant',
     description: 'AI-powered travel planning web application with custom packing lists, itinerary management, expense tracking, weather forecasts, and travel checklists. Built with React and Firebase.',
