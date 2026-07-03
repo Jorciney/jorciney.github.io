@@ -18,22 +18,40 @@ interface QrPreviewProps {
 export default function QrPreview({ payload, mode, t }: QrPreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [error, setError] = useState(false)
-  const ready = Boolean(payload) && !error
+  const [rendered, setRendered] = useState(false)
+  // Only "ready" once the async render for the current payload has actually completed,
+  // so the download buttons never act on a stale or not-yet-drawn canvas.
+  const ready = rendered && !error
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas || !payload) {
       setError(false)
+      setRendered(false)
       return
     }
+    // Guard against out-of-order resolution when payload changes rapidly (per keystroke).
+    let cancelled = false
+    setRendered(false)
     QRCode.toCanvas(canvas, payload, {
       width: 240,
       margin: 2,
       color: { dark: '#000000', light: '#ffffff' },
       errorCorrectionLevel: 'M',
     })
-      .then(() => setError(false))
-      .catch(() => setError(true))
+      .then(() => {
+        if (cancelled) return
+        setError(false)
+        setRendered(true)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setError(true)
+        setRendered(false)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [payload])
 
   return (
@@ -42,7 +60,7 @@ export default function QrPreview({ payload, mode, t }: QrPreviewProps) {
 
       <div className="inline-flex items-center justify-center rounded-lg bg-white p-4 min-w-[272px] min-h-[272px]">
         {/* Canvas is always mounted so the ref is stable; hidden until valid */}
-        <canvas ref={canvasRef} className={ready ? 'block' : 'hidden'} />
+        <canvas ref={canvasRef} role="img" aria-label={t.previewLabel} className={ready ? 'block' : 'hidden'} />
         {!ready && (
           <span className="max-w-[220px] text-sm text-gray-400 italic">
             {error ? t.contentTooLong : t.previewPlaceholder}
