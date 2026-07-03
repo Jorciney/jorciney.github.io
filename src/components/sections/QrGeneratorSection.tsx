@@ -14,17 +14,33 @@ import { translations, type Language, type QrMode } from '@/lib/qr/translations'
 const LANG_KEY = 'qr-lang'
 const VALID_LANGS: Language[] = ['en', 'nl', 'pt', 'fr']
 
+// Match the first browser-preferred language we support (e.g. 'nl-BE' -> 'nl').
+function detectBrowserLanguage(): Language | null {
+  const candidates = navigator.languages?.length ? navigator.languages : [navigator.language]
+  for (const tag of candidates) {
+    const primary = tag?.toLowerCase().split('-')[0]
+    if (primary && (VALID_LANGS as string[]).includes(primary)) {
+      return primary as Language
+    }
+  }
+  return null
+}
+
 export default function QrGeneratorSection() {
   const [language, setLanguage] = useState<Language>('en')
   const [mode, setMode] = useState<QrMode>('sepa')
   const [payload, setPayload] = useState<string | null>(null)
 
-  // Restore persisted language on mount
+  // On mount, pick the language: saved preference first, then the browser's
+  // preferred language, otherwise the English default set above.
   useEffect(() => {
     const stored = localStorage.getItem(LANG_KEY)
     if (stored && (VALID_LANGS as string[]).includes(stored)) {
       setLanguage(stored as Language)
+      return
     }
+    const detected = detectBrowserLanguage()
+    if (detected) setLanguage(detected)
   }, [])
 
   function changeLanguage(next: Language) {
