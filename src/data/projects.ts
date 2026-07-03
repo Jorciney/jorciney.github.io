@@ -29,6 +29,19 @@ export const projects: Project[] = [
     isClientProject: false
   },
   {
+    id: 'cleverupps-shop',
+    title: 'CleverUpps Shop',
+    description: 'E-commerce storefront for CleverUpps’ 3D-printed products — playful toys for kids, durable gear for dogs, and sculptural home décor, designed in-house and printed to order in small, low-waste batches in Belgium. Features a made-to-order print flow, Mollie hosted checkout (Bancontact, Visa, Mastercard), tracked shipping via Sendcloud, category browsing, and a fully localized 4-language storefront.',
+    icon: '🛒',
+    logo: '/assets/projects/cleverupps-shop.png',
+    technologies: ['E-commerce', 'Mollie Payments', 'Bancontact', 'Sendcloud', '3D Printing', 'i18n (4 languages)'],
+    links: [
+      { label: 'Visit Website', url: 'https://shop.cleverupps.be', type: 'primary' }
+    ],
+    featured: true,
+    isClientProject: false
+  },
+  {
     id: 'telenet-microfrontend',
     title: 'Telenet Micro-Frontend Platform',
     description: 'Led the implementation of Module Federation architecture, improving deployment cycles and team autonomy across multiple frontend teams.',
