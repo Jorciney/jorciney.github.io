@@ -46,10 +46,17 @@ export default function SepaForm({ t, onPayloadChange }: SepaFormProps) {
   }
 
   const amountShownInvalid = amountRaw.length > 0 && !amountOk
+  const nameShownInvalid = name.trim().length > 0 && !nameOk
 
   return (
     <div>
-      <Field label={t.sepaNameLabel} hint={t.sepaNameHint} htmlFor="sepa-name">
+      <Field
+        label={t.sepaNameLabel}
+        hint={t.sepaNameHint}
+        htmlFor="sepa-name"
+        message={nameShownInvalid ? t.sepaNameRequired : undefined}
+        status={nameShownInvalid ? 'error' : 'idle'}
+      >
         <Input
           id="sepa-name"
           value={name}

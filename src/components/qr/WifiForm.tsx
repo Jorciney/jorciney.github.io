@@ -21,10 +21,17 @@ export default function WifiForm({ t, onPayloadChange }: WifiFormProps) {
   const [encryption, setEncryption] = useState<WifiEncryption>('WPA')
   const [hidden, setHidden] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [ssidTouched, setSsidTouched] = useState(false)
+  const [passwordTouched, setPasswordTouched] = useState(false)
 
   const needsPassword = encryption !== 'nopass'
   const ssidOk = ssid.trim().length > 0
   const passwordOk = !needsPassword || password.length > 0
+
+  // Only surface "required" messages once the user has left an empty required field,
+  // mirroring how SepaForm shows its inline errors only for engaged fields.
+  const ssidError = ssidTouched && !ssidOk
+  const passwordError = needsPassword && passwordTouched && !passwordOk
 
   useEffect(() => {
     if (ssidOk && passwordOk) {
@@ -36,8 +43,19 @@ export default function WifiForm({ t, onPayloadChange }: WifiFormProps) {
 
   return (
     <div>
-      <Field label={t.wifiSsidLabel} htmlFor="wifi-ssid">
-        <Input id="wifi-ssid" value={ssid} onChange={(e) => setSsid(e.target.value)} placeholder="MyNetwork" />
+      <Field
+        label={t.wifiSsidLabel}
+        htmlFor="wifi-ssid"
+        message={ssidError ? t.wifiSsidRequired : undefined}
+        status={ssidError ? 'error' : 'idle'}
+      >
+        <Input
+          id="wifi-ssid"
+          value={ssid}
+          onChange={(e) => setSsid(e.target.value)}
+          onBlur={() => setSsidTouched(true)}
+          placeholder="MyNetwork"
+        />
       </Field>
 
       <Field label={t.wifiEncryptionLabel} htmlFor="wifi-enc">
@@ -56,13 +74,19 @@ export default function WifiForm({ t, onPayloadChange }: WifiFormProps) {
       </Field>
 
       {needsPassword && (
-        <Field label={t.wifiPasswordLabel} htmlFor="wifi-pass">
+        <Field
+          label={t.wifiPasswordLabel}
+          htmlFor="wifi-pass"
+          message={passwordError ? t.wifiPasswordRequired : undefined}
+          status={passwordError ? 'error' : 'idle'}
+        >
           <div className="flex gap-2">
             <Input
               id="wifi-pass"
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onBlur={() => setPasswordTouched(true)}
             />
             <Button type="button" variant="outline" size="md" onClick={() => setShowPassword((s) => !s)}>
               {showPassword ? t.wifiHide : t.wifiShow}
