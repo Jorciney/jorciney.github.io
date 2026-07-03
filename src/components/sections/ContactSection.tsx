@@ -12,7 +12,7 @@ export default function ContactSection() {
   const socialLinks = [
     { icon: Github, label: 'GitHub', href: 'https://github.com/jorciney' },
     { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/jorciney' },
-    { icon: Building2, label: 'LinkedIn', href: 'https://www.cleveruppsmarketing.be' }
+    { icon: Building2, label: 'CleverUpps Marketing', href: 'https://www.cleveruppsmarketing.be' }
   ]
 
   return (
