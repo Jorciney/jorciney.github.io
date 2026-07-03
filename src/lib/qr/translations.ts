@@ -37,6 +37,8 @@ export interface Translations {
   sepaIbanValid: string
   sepaAmountInvalid: string
   sepaNameRequired: string
+  sepaBelgiumNote: string
+  sepaPreviewLabel: string
   // Preview / download
   previewLabel: string
   previewPlaceholder: string
@@ -56,7 +58,7 @@ export const translations: Record<Language, Translations> = {
     pageTitle: 'QR Code Generator',
     pageLede: 'Generate a QR code for a link, a WiFi network, or a SEPA payment. Everything runs in your browser — nothing is uploaded or stored.',
     languageLabel: 'Language',
-    modes: { text: 'Text / URL', wifi: 'WiFi', sepa: 'SEPA Payment' },
+    modes: { text: 'Text / URL', wifi: 'WiFi', sepa: 'Bank Payment (SEPA)' },
     textLabel: 'Text or URL',
     textHint: 'anything you want to encode',
     textPlaceholder: 'https://jorciney.dev',
@@ -82,6 +84,8 @@ export const translations: Record<Language, Translations> = {
     sepaIbanValid: '✓ Valid IBAN',
     sepaAmountInvalid: 'Enter a valid amount',
     sepaNameRequired: 'Enter the beneficiary name',
+    sepaBelgiumNote: 'For Belgian bank accounts only. Scan the QR code with your bank app to open a pre-filled transfer.',
+    sepaPreviewLabel: 'Scan with your bank app',
     previewLabel: 'Scan with your app',
     previewPlaceholder: 'Fill in the form to see the QR code',
     contentTooLong: 'Content is too long to fit in a QR code',
@@ -95,7 +99,7 @@ export const translations: Record<Language, Translations> = {
     pageTitle: 'QR-code Generator',
     pageLede: 'Maak een QR-code voor een link, een WiFi-netwerk of een SEPA-betaling. Alles gebeurt in je browser — niets wordt geüpload of opgeslagen.',
     languageLabel: 'Taal',
-    modes: { text: 'Tekst / URL', wifi: 'WiFi', sepa: 'SEPA-betaling' },
+    modes: { text: 'Tekst / URL', wifi: 'WiFi', sepa: 'Bankbetaling (SEPA)' },
     textLabel: 'Tekst of URL',
     textHint: 'alles wat je wil coderen',
     textPlaceholder: 'https://jorciney.dev',
@@ -121,6 +125,8 @@ export const translations: Record<Language, Translations> = {
     sepaIbanValid: '✓ Geldig IBAN',
     sepaAmountInvalid: 'Voer een geldig bedrag in',
     sepaNameRequired: 'Voer de naam van de begunstigde in',
+    sepaBelgiumNote: 'Enkel voor Belgische bankrekeningen. Scan de QR-code met je bankapp om een vooraf ingevulde overschrijving te openen.',
+    sepaPreviewLabel: 'Scan met je bankapp',
     previewLabel: 'Scan met je app',
     previewPlaceholder: 'Vul het formulier in om de QR-code te zien',
     contentTooLong: 'Inhoud is te lang voor een QR-code',
@@ -134,7 +140,7 @@ export const translations: Record<Language, Translations> = {
     pageTitle: 'Gerador de Código QR',
     pageLede: 'Gere um código QR para um link, uma rede WiFi ou um pagamento SEPA. Tudo acontece no seu navegador — nada é enviado ou armazenado.',
     languageLabel: 'Idioma',
-    modes: { text: 'Texto / URL', wifi: 'WiFi', sepa: 'Pagamento SEPA' },
+    modes: { text: 'Texto / URL', wifi: 'WiFi', sepa: 'Pagamento bancário (SEPA)' },
     textLabel: 'Texto ou URL',
     textHint: 'qualquer coisa que queira codificar',
     textPlaceholder: 'https://jorciney.dev',
@@ -160,6 +166,8 @@ export const translations: Record<Language, Translations> = {
     sepaIbanValid: '✓ IBAN válido',
     sepaAmountInvalid: 'Introduza um montante válido',
     sepaNameRequired: 'Introduza o nome do beneficiário',
+    sepaBelgiumNote: 'Apenas para contas bancárias belgas. Digitalize o código QR com a sua app bancária para abrir uma transferência pré-preenchida.',
+    sepaPreviewLabel: 'Digitalize com a sua app bancária',
     previewLabel: 'Digitalize com a sua aplicação',
     previewPlaceholder: 'Preencha o formulário para ver o código QR',
     contentTooLong: 'O conteúdo é demasiado longo para um código QR',
@@ -173,7 +181,7 @@ export const translations: Record<Language, Translations> = {
     pageTitle: 'Générateur de code QR',
     pageLede: 'Générez un code QR pour un lien, un réseau WiFi ou un paiement SEPA. Tout se passe dans votre navigateur — rien n\'est envoyé ni stocké.',
     languageLabel: 'Langue',
-    modes: { text: 'Texte / URL', wifi: 'WiFi', sepa: 'Paiement SEPA' },
+    modes: { text: 'Texte / URL', wifi: 'WiFi', sepa: 'Paiement bancaire (SEPA)' },
     textLabel: 'Texte ou URL',
     textHint: 'tout ce que vous voulez encoder',
     textPlaceholder: 'https://jorciney.dev',
@@ -199,6 +207,8 @@ export const translations: Record<Language, Translations> = {
     sepaIbanValid: '✓ IBAN valide',
     sepaAmountInvalid: 'Saisissez un montant valide',
     sepaNameRequired: 'Saisissez le nom du bénéficiaire',
+    sepaBelgiumNote: 'Uniquement pour les comptes bancaires belges. Scannez le code QR avec votre application bancaire pour ouvrir un virement pré-rempli.',
+    sepaPreviewLabel: 'Scannez avec votre application bancaire',
     previewLabel: 'Scannez avec votre application',
     previewPlaceholder: 'Remplissez le formulaire pour voir le code QR',
     contentTooLong: 'Le contenu est trop long pour un code QR',

@@ -16,7 +16,7 @@ const VALID_LANGS: Language[] = ['en', 'nl', 'pt', 'fr']
 
 export default function QrGeneratorSection() {
   const [language, setLanguage] = useState<Language>('en')
-  const [mode, setMode] = useState<QrMode>('text')
+  const [mode, setMode] = useState<QrMode>('sepa')
   const [payload, setPayload] = useState<string | null>(null)
 
   // Restore persisted language on mount

@@ -50,6 +50,9 @@ export default function SepaForm({ t, onPayloadChange }: SepaFormProps) {
 
   return (
     <div>
+      <p className="mb-4 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300">
+        {t.sepaBelgiumNote}
+      </p>
       <Field
         label={t.sepaNameLabel}
         hint={t.sepaNameHint}

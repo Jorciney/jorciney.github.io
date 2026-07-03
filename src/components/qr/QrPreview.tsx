@@ -22,6 +22,8 @@ export default function QrPreview({ payload, mode, t }: QrPreviewProps) {
   // Only "ready" once the async render for the current payload has actually completed,
   // so the download buttons never act on a stale or not-yet-drawn canvas.
   const ready = rendered && !error
+  // Payment QRs are scanned specifically by a bank app, not a generic scanner.
+  const scanLabel = mode === 'sepa' ? t.sepaPreviewLabel : t.previewLabel
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -56,11 +58,11 @@ export default function QrPreview({ payload, mode, t }: QrPreviewProps) {
 
   return (
     <Card className="p-8 text-center">
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">{t.previewLabel}</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">{scanLabel}</p>
 
       <div className="inline-flex items-center justify-center rounded-lg bg-white p-4 min-w-[272px] min-h-[272px]">
         {/* Canvas is always mounted so the ref is stable; hidden until valid */}
-        <canvas ref={canvasRef} role="img" aria-label={t.previewLabel} className={ready ? 'block' : 'hidden'} />
+        <canvas ref={canvasRef} role="img" aria-label={scanLabel} className={ready ? 'block' : 'hidden'} />
         {!ready && (
           <span className="max-w-[220px] text-sm text-gray-400 italic">
             {error ? t.contentTooLong : t.previewPlaceholder}
