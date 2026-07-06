@@ -2,18 +2,6 @@ import { Project } from '@/lib/types'
 
 export const projects: Project[] = [
   {
-    id: 'kitchen-3d',
-    title: 'Interactive 3D Kitchen Designer',
-    description: 'A real-time, browser-based 3D kitchen and living-room configurator built from scratch with Three.js. Features switchable layouts, live material/finish swatches, clickable measurements, walk-through navigation, and physically-based rendering (ACES tone mapping, IBL reflections).',
-    icon: '🍳',
-    technologies: ['Three.js', 'WebGL', 'JavaScript', '3D Rendering', 'PBR'],
-    links: [
-      { label: 'Launch 3D Kitchen', url: '/kitchen/', type: 'primary' }
-    ],
-    featured: true,
-    isClientProject: false
-  },
-  {
     id: 'cleverbooking',
     title: 'CleverBooking',
     description: 'All-in-one SaaS booking platform for service businesses (salons, clinics, spas). A single admin dashboard plus a branded customer booking page covering appointments, CRM & segments, staff & roles, multi-location, Stripe payments, and analytics across 12 integrated modules. Features Google Meet video bookings, a WhatsApp AI booking bot, an embeddable widget, and a fully localized 5-language experience.',
@@ -36,6 +24,18 @@ export const projects: Project[] = [
     technologies: ['Marketplace', 'Real-time Booking', 'Geo Search', 'SEO', 'i18n', 'Multi-country'],
     links: [
       { label: 'Visit Website', url: 'https://www.salunas.com', type: 'primary' }
+    ],
+    featured: true,
+    isClientProject: false
+  },
+  {
+    id: 'kitchen-3d',
+    title: 'Interactive 3D Kitchen Designer',
+    description: 'A real-time, browser-based 3D kitchen and living-room configurator built from scratch with Three.js. Features switchable layouts, live material/finish swatches, clickable measurements, walk-through navigation, and physically-based rendering (ACES tone mapping, IBL reflections).',
+    icon: '🍳',
+    technologies: ['Three.js', 'WebGL', 'JavaScript', '3D Rendering', 'PBR'],
+    links: [
+      { label: 'Launch 3D Kitchen', url: '/kitchen/', type: 'primary' }
     ],
     featured: true,
     isClientProject: false
