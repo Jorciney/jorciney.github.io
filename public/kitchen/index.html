@@ -115,8 +115,9 @@
     <option value="left">Left wall</option>
     <option value="door">By the door wall</option>
     <option value="right_cab">Right · cabinets left</option>
-    <option value="right_onecol" selected>Right · one column left (current)</option>
-    <option value="right_nocab">Right · nothing left</option>
+    <option value="right_onecol">Right · one column left</option>
+    <option value="right_nocab" selected>Right · nothing left (current)</option>
+    <option value="right_nocab_island">Right · nothing left + island shelves</option>
     <option value="right_above">Right · only above</option>
   </select>
   <span class="lab">Worktop</span>
@@ -666,27 +667,55 @@ function fridge2(g){const W=0.908,H=1.778,D=0.730,fz=D+0.006;
   const fh=box(W-0.30,0.018,0.026,hm,0,0.10+fdH-0.06,fz+0.018,g);fixedHandles.push(fh);
   // subtle Samsung-style top trim line
   box(W-0.02,0.012,0.02,mat(0x1b1c1e,{roughness:0.5}),0,H-0.03,fz+0.002,g);
-  box(W,TALL-H,D,M.cab,0,(H+TALL)/2,D/2,g);                                              // cabinet above
-  pull(g,0,H+0.07,D+0.012,0.4,true);}
+  const gapTop=0.05, cabB=H+gapTop;                                                       // 5cm clearance above the fridge to slide it out
+  box(W,RH-cabB-0.02,D,M.cab,0,(cabB+RH-0.02)/2,D/2,g);                                   // cabinet above — up to the ceiling
+  pull(g,0,cabB+0.09,D+0.012,0.4,true);}
 function backsplash(g,L,xc=0){box(L,0.4,0.02,M.splash,xc,CH+0.22,0.012,g);}
-// wall (upper) cabinet: bottom 50cm above the counter
-function wallCab(g,L){const y0=CH+0.52,h=0.70,d=0.35,fz=d+0.012;
+// wall (upper) cabinet: bottom 50cm above the counter. topY defaults to a 70cm-tall box,
+// but pass topY=RH to make the cabinet run all the way up and touch the ceiling.
+function wallCab(g,L,topY){const y0=CH+0.52,d=0.35,fz=d+0.012,h=(topY||y0+0.70)-y0;
   box(L,h,d-0.012,M.cab,0,y0+h/2,d/2-0.006,g);                              // carcass
   const n=Math.max(1,Math.round(L/0.45)),cw=L/n,gap=0.012;
   for(let i=0;i<n;i++){const cx=-L/2+cw*(i+0.5);
     doorFront(cw-gap,h-gap,0.02,M.cab,cx,y0+h/2,fz,g);                      // door front
     pull(g,cx,y0+0.09,fz,Math.min(0.16,cw-0.1),true);}
   box(L+0.02,0.02,d+0.02,mat(0x35322c,{roughness:0.5}),0,y0-0.006,d/2,g);}  // under-cabinet shadow reveal
+// upper-only cabinet spanning a given y-range up to the ceiling (used above the fridge run, no counter below).
+function upperCab(g,L,y0,topY,d){d=d||0.35;const fz=d+0.012,h=topY-y0;
+  box(L,h,d-0.012,M.cab,0,y0+h/2,d/2-0.006,g);                              // carcass
+  const n=Math.max(1,Math.round(L/0.5)),cw=L/n,gap=0.012;
+  for(let i=0;i<n;i++){const cx=-L/2+cw*(i+0.5);
+    doorFront(cw-gap,h-gap,0.02,M.cab,cx,y0+h/2,fz,g);                      // door front
+    pull(g,cx,y0+0.10,fz,Math.min(0.18,cw-0.1),true);}
+  box(L+0.02,0.02,d+0.02,mat(0x35322c,{roughness:0.5}),0,y0-0.006,d/2,g);}  // under-cabinet shadow reveal
+// plain floating wooden shelves mounted on the WEST wall, spanning z from zA to zB.
+// Built in its own group registered as a unit so a layout rebuild disposes it cleanly.
+function wallShelves(zA,zB,levels,depth){depth=depth||0.30;
+  const g=new T.Group();g.userData.isUnit=true;g.userData.wallSide='ISL';
+  g.userData.skip=true;units.push(g);scene.add(g);
+  const plankTex=(function(){const c=document.createElement('canvas');c.width=256;c.height=64;const x=c.getContext('2d');
+    x.fillStyle='#b08050';x.fillRect(0,0,256,64);
+    for(let i=0;i<16;i++){const y=Math.random()*64;x.strokeStyle=`rgba(${96+Math.random()*36|0},${62+Math.random()*26|0},${34+Math.random()*18|0},0.35)`;
+      x.lineWidth=0.6+Math.random()*1.4;x.beginPath();x.moveTo(0,y);
+      for(let px=0;px<=256;px+=24)x.lineTo(px,y+(Math.random()-0.5)*4);x.stroke();}
+    const t=new T.CanvasTexture(c);t.encoding=T.sRGBEncoding;t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(2,1);return t;})();
+  const oak=new T.MeshStandardMaterial({map:plankTex,color:0xcf9f6c,roughness:0.5,metalness:0.03,envMapIntensity:0.45});
+  const zc=(zA+zB)/2, span=zB-zA;
+  levels.forEach(y=>box(depth,0.045,span,oak,X0+depth/2,y,zc,g));           // floating planks off the west wall
+  return g;
+}
 
 // perimeter cabinetry — switchable fridge layouts
 function placeEStandard(){                                       // door wall: prep + drawers + oven/microwave
-  let g=onWall('E',-1.2425);baseRun(g,0.645,{});backsplash(g,0.645,0);wallCab(g,0.645);
+  let g=onWall('E',-1.2425);baseRun(g,0.645,{});backsplash(g,0.645,0);wallCab(g,0.645,RH-0.02);  // upper cab to the ceiling
   g=onWall('E',-0.62);tallRun(g,[{w:0.6,type:'drawerlarder'}]);
+  g=onWall('E',-0.62);upperCab(g,0.6,TALL+0.02,RH-0.02,CD);      // cabinet above the larder → ceiling
   g=onWall('E',-0.02);tallRun(g,[{w:0.6,type:'ovenmicro'}]);
+  g=onWall('E',-0.02);upperCab(g,0.6,TALL+0.02,RH-0.02,CD);      // cabinet above the oven/microwave tower → ceiling
 }
 function placeUnits(mode){
   const islN=Z1+0.13-0.85;                                       // island's north edge — left-wall cabinets stop here
-  const fridgeRight=mode==='right_cab'||mode==='right_nocab'||mode==='right_above'||mode==='right_onecol';
+  const fridgeRight=mode==='right_cab'||mode==='right_nocab'||mode==='right_nocab_island'||mode==='right_above'||mode==='right_onecol';
   // N-wall sink counter. When the fridge stands in the NW corner (right modes) it is 0.73m deep,
   // so the counter must stop short of it: shorten the left end and shift the run right to clear the fridge.
   (()=>{
@@ -721,9 +750,18 @@ function placeUnits(mode){
       // one column to the LEFT of the fridge: 4cm gap, 42cm wide
       const colW=0.42, colZ=frFar+0.04+colW/2;                  // 4cm clear of the fridge far edge
       g=onWall('W',colZ);tallRun(g,[{w:colW,type:'drawerlarder'}],0.730);
-    }else if(mode==='right_nocab'){                            // fridge north, counter under the window, nothing to its left
+    }else if(mode==='right_nocab'||mode==='right_nocab_island'){ // fridge north; upper cabinets to its left up to the wall's end
       let g=onWall('W',-1.255);baseRun(g,0.62,{d:0.730});
       g=onWall('W',frZ);fridge2(g);
+      // upper-only cabinets left of the fridge, running to the end of the wall (island edge) and up to the ceiling.
+      // Same depth as the fridge cabinet-above (0.73) and same raised bottom (5cm above the fridge for clearance).
+      const upA=frFar+0.04, upB=islN, upRun=upB-upA;
+      if(upRun>0.2){const upY0=1.778+0.05;                     // matches the raised fridge cabinet-above
+        g=onWall('W',upA+upRun/2);upperCab(g,upRun,upY0,RH-0.02,0.730);}
+      // VARIANT: plain wooden shelves on the west wall, from the end of the upper cabinets to the end of the wall.
+      if(mode==='right_nocab_island'){
+        wallShelves(islN+0.03, Z1-0.02, [1.45,1.85]);              // two floating oak planks over the island's west end
+      }
     }else if(mode==='right_above'){                            // fridge north, only the cabinet above it
       let g=onWall('W',frZ);fridge2(g);
     }else{                                                      // 'left' — current layout (already flush to the island)
@@ -734,7 +772,7 @@ function placeUnits(mode){
     }
   }
 }
-placeUnits('right_onecol');
+placeUnits('right_nocab');
 
 // ===== ISLAND: L-block 13cm into living; hob at far-right end across from the sink =====
 const ISL={top:CH,
@@ -742,9 +780,9 @@ const ISL={top:CH,
   hobX:-0.70, hobZ:Z1+0.13-0.42 };                          // hob at far-right end, across from the sink
 (function(){const I=ISL,top=I.top;
   const mCx=(I.mX0+I.mX1)/2,mCz=(I.mZ0+I.mZ1)/2,mW=I.mX1-I.mX0,mD=I.mZ1-I.mZ0;
-  // worktop + body
+  // worktop + body (body stops where the stone waterfall panel starts — avoids coplanar z-fighting at the end face)
   box(mW+0.03,0.04,mD+0.03,M.stone,mCx,top+0.005,mCz);
-  box(mW,top-0.04,mD,M.cab,mCx,(top-0.04)/2,mCz);
+  box(mW-0.05,top-0.04,mD,M.cab,mCx-0.025,(top-0.04)/2,mCz);
   // east waterfall end (stone)
   box(0.05,top,mD,M.stone,I.mX1-0.025,top/2,mCz);
   // ---- cabinet faces: DRAWERS on the kitchen (north) side, DOORS on the living-room (south) side ----
@@ -1031,7 +1069,7 @@ wallGroup.traverse(o=>{if(!o.isMesh)return;const{size,center}=aabb(o);
 // each cabinetry/appliance UNIT hides as a whole with the wall it stands on (base + tall together)
 const WP={N:{axis:'z',value:Z0},W:{axis:'x',value:X0},E:{axis:'x',value:X1}};
 let unitDefs=[];
-function computeUnitDefs(){unitDefs=units.map(g=>Object.assign({grp:g},WP[g.userData.wallSide]));}
+function computeUnitDefs(){unitDefs=units.filter(g=>WP[g.userData.wallSide]).map(g=>Object.assign({grp:g},WP[g.userData.wallSide]));}
 computeUnitDefs();
 function clearUnits(){units.forEach(g=>{g.traverse(o=>{if(o.isMesh&&o.geometry)o.geometry.dispose();});scene.remove(g);});
   units.length=0;handleSlots.length=0;cabHandles.length=0;fixedHandles.length=0;}
@@ -1045,6 +1083,7 @@ scene.traverse(o=>{if(!o.isMesh||o.userData.skip)return;
   const{center}=aabb(o);
   if(center.x>-2.95&&center.x<-1.80&&center.z>Z1-0.55&&center.z<Z1+0.2)return;     // alcove coffee station — always visible (arch grows forward to island west corner)
   if(center.z>Z1+0.25)return;                                                      // living-room furniture (sofas, table, chairs) — never dollhouse-culled
+  if(center.x>X0-0.05&&center.x<X0+1.70&&center.z>Z1+0.13-0.90&&center.z<Z1+0.18)return; // the island block itself — solid, never see-through
   let best=null,bd=1e9;
   wallSegs.forEach(w=>{const d=Math.abs(center[w.axis]-w.value);if(d<bd){bd=d;best=w;}});
   if(best&&bd<0.55)extras.push({mesh:o,axis:best.axis,value:best.value});});
