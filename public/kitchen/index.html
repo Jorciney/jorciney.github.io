@@ -321,7 +321,7 @@ function travertineTex(nTile){
 
 // floors: kitchen travertine + living-room wood  (registered for teleport raycasting)
 const floors=[];
-(function(){const N=6, TILE=0.6, SPAN=N*TILE;                                    // 6 tiles per canvas · 60cm each · 3.6m span
+(function(){const N=6, TILE=0.8, SPAN=N*TILE;                                    // 6 tiles per canvas · 80cm each · 4.8m span
   const tv=travertineTex(N);
   [tv.map,tv.rough].forEach(t=>{t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(RW/SPAN,RD/SPAN);t.anisotropy=8;});
   const f=new T.Mesh(new T.PlaneGeometry(RW,RD),
