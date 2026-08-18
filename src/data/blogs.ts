@@ -2,6 +2,110 @@ import { BlogPost } from '@/lib/types'
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: 'appointment-booking-beauty-salons',
+    title: 'What I Learned Building Appointment Booking for Beauty Salons',
+    excerpt: 'Booking looks like a solved problem until you build it for a real salon. Notes on double bookings, no-shows, staff calendars and the messy scheduling rules nobody tells you about upfront.',
+    content: `
+Booking an appointment looks like a solved problem. Pick a service, pick a time, done. That was roughly my mental model before I started building a booking platform for salons — and almost every assumption in it turned out to be wrong.
+
+What follows is what actually makes salon scheduling hard, from the perspective of someone who had to write the code.
+
+## The problem isn't the calendar. It's the phone.
+
+Talk to a salon owner and they rarely complain about their calendar. They complain about interruptions.
+
+A client messages on Instagram asking if there's anything free on Thursday. Someone calls mid-treatment. A WhatsApp message arrives at 22:00. Each one costs a few minutes and a bit of attention, and none of it is the work they trained to do. The hairdresser is holding scissors and a phone at the same time.
+
+That reframes the goal. You're not building a nicer calendar for the owner — the paper one works fine. You're removing the back-and-forth that surrounds it. The real feature is that the client can answer "what's free on Thursday?" without involving a human at all.
+
+It also means the booking page is the product, not the admin panel. The admin panel is what the owner tolerates so the booking page can exist.
+
+## Availability is a computation, not a lookup
+
+Here's the naive model: staff have working hours, appointments occupy slots, free slots are what's left.
+
+Every one of those turns out to be more subtle.
+
+**Services have different durations.** A cut is 30 minutes, colour is 2 hours. Available slots depend on which service the client picked, so you can't precompute a single grid of free times — you compute availability per service.
+
+**Staff are not interchangeable.** Not everyone does every treatment. A client booking balayage can only be offered slots from staff qualified for it. Availability is a function of (service, staff, day), and "any available staff member" is its own case that has to union the others.
+
+**Gaps between appointments are wasted money.** If you only offer slots on the hour, a 30-minute cut at 09:00 followed by nothing until 11:00 leaves a dead hour. Slot granularity is a real business decision, not a UI detail.
+
+**The day has structure beyond opening hours.** Lunch breaks, a staff member who works Tuesday and Thursday only, holidays, a chair being out of service, someone leaving early on Friday.
+
+None of this is intellectually hard. It's just that "is this slot free?" is never a database lookup — it's a calculation with a surprising number of inputs, and it runs on every page load of the booking page.
+
+## Timezones will bite you, and not where you expect
+
+The obvious timezone bugs are easy: store UTC, render local.
+
+The one that got me was subtler. Code that asks "what time is it now?" to decide which slots are still bookable has to ask that question *in the salon's timezone*, not in the server's, and not in the visitor's. A client browsing from another country at 23:00 their time should still see tomorrow's slots correctly relative to the salon.
+
+Get this wrong and the bug is nearly invisible: availability is correct all day and quietly wrong around midnight, or only for users in certain regions. It won't show up in your tests unless you deliberately write one for it.
+
+Resolve "now" in the location's timezone. Every time.
+
+## No-shows are the actual business problem
+
+Empty chairs are what genuinely costs a salon money. A no-show at 14:00 on a Saturday is revenue that cannot be recovered — the slot is gone.
+
+Software can't eliminate no-shows, but it moves the number:
+
+- **Confirmation immediately after booking**, so the appointment exists somewhere other than the client's memory.
+- **A reminder before the appointment**, which is the single highest-leverage feature. Most no-shows aren't people deciding not to come; they're people who forgot.
+- **Easy self-service cancellation.** This feels counterintuitive — why make it easy to cancel? Because a cancellation 24 hours out is a slot you can resell. A silent no-show is not. You want to convert no-shows into early cancellations.
+- **Deposits or prepayment for high-value treatments.** Blunt, effective, and worth making configurable per service rather than global — a salon will happily take a deposit for a €150 colour and never for a €20 fringe trim.
+
+The lesson: features that look like "communication" are really revenue protection.
+
+## Multi-tenancy shapes everything
+
+Every salon believes their scheduling rules are normal. Collectively they are not.
+
+Some run one chair; some run four locations. Some do house calls where travel time between clients has to be blocked out. Some offer online consultations. Some want clients to pick a specific stylist; others deliberately don't, to balance workload.
+
+Two things helped:
+
+**Model the tenant boundary early.** Retrofitting multi-tenancy into a single-salon schema is genuinely painful. Every query needs a tenant scope, and missing one is a data leak between businesses — the worst class of bug in this domain.
+
+**Make rules configurable, not conditional.** The temptation is a flag per special case. That path ends in unmaintainable branching. Better to find the general model — appointments have a duration, a location kind, an optional travel buffer, an optional deposit — and let each salon configure it.
+
+## Self-service setup is a feature
+
+Salon owners are not going to file a support ticket to change a price. If updating a service, adjusting opening hours or adding a staff member requires you, you've built a consultancy, not a product.
+
+The corollary is that onboarding must reach value fast. Nobody evaluates booking software by reading the settings page — they evaluate it by seeing their own booking page live with their own treatments on it. Get them to that moment with the smallest possible number of required fields, and let the rest be filled in later.
+
+## Small things that mattered more than expected
+
+- **Mobile is not a secondary surface.** Clients book from a phone, in bed, at night. So do the owners — many discover the product from a phone ad and never open a laptop.
+- **Language matters commercially.** Confirmations and reminders in the client's own language aren't a nicety in multilingual markets; they're the difference between a message that gets read and one that doesn't.
+- **Show only genuinely available slots.** Offering a time that then fails on submit is worse than showing fewer options.
+- **Appointment history is the beginning of a CRM.** Once you know who came, for what, and when, rebooking prompts and segmentation follow naturally.
+
+## What I'd tell myself at the start
+
+Booking is a deceptively deep domain. The calendar UI is a weekend. The scheduling engine underneath — durations, qualified staff, breaks, buffers, timezones, tenant-specific rules — is where the actual work lives, and it's the part that determines whether owners trust the system enough to stop answering DMs.
+
+Build the availability calculation properly first. Everything else is a view over it.
+
+---
+
+## The product
+
+This isn't theoretical — it's the domain I work in day to day. Everything above came out of building [CleverBooking](https://clever-booking.com), a booking platform for salons, barbers and beauty businesses.
+
+It gives a business its own booking page where clients book 24/7, a shared calendar across staff, per-staff working hours and services, automatic confirmations and reminders, optional deposits and online payments via Stripe, support for in-store, mobile and online appointments, and reporting on revenue and no-shows. Plans start at €19/month and begin with a 14-day free trial.
+
+If you run a salon and recognise the Instagram-DM problem from the top of this post, have a look: [clever-booking.com](https://clever-booking.com).
+    `,
+    date: '2026-08-18',
+    readTime: '9 min',
+    tags: ['Product', 'SaaS', 'Booking Systems', 'Scheduling', 'Multi-Tenancy'],
+    featured: true
+  },
+  {
     slug: 'angular-webpack-vs-esbuild',
     title: 'Angular webpack vs esbuild',
     excerpt: 'A comprehensive comparison between webpack and esbuild for Angular applications, including build times, configuration differences, and performance benchmarks.',
