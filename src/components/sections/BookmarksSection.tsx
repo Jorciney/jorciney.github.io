@@ -1,111 +1,24 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { ExternalLink, Calendar, Tag, Bookmark, Globe, Search, Filter, RefreshCw } from 'lucide-react'
+import { useState } from 'react'
+import { ExternalLink, Calendar, Tag, Bookmark, Globe, Search, Filter } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { RaindropBookmark } from '@/lib/types'
-import { formatBookmarkDate, getBookmarkDomain, mockBookmarks } from '@/lib/raindrop'
-import { fetchPublicRaindrops } from '@/lib/raindrop-client'
+import { formatBookmarkDate, getBookmarkDomain } from '@/lib/raindrop'
 import '@/styles/bookmark-content.css'
 
-// Extract image from HTML content
-function extractImageFromHtml(html: string): string | null {
-  const temp = document.createElement('div')
-  temp.innerHTML = html
-  const img = temp.querySelector('img')
-  return img?.getAttribute('src') || null
-}
-
-// Clean HTML by removing images (since we'll display them separately)
-function sanitizeAndCleanHtml(html: string): string {
-  const temp = document.createElement('div')
-  temp.innerHTML = html
-  
-  // Remove all images since we'll display them separately
-  const images = temp.querySelectorAll('img')
-  images.forEach(img => img.remove())
-  
-  // Allow only safe tags and attributes
-  const allowedTags = ['br', 'p', 'span', 'strong', 'em', 'b', 'i']
-  const allowedAttributes = ['title']
-  
-  // Remove script tags and event handlers
-  const elements = temp.querySelectorAll('*')
-  elements.forEach(el => {
-    // Remove disallowed tags
-    if (!allowedTags.includes(el.tagName.toLowerCase())) {
-      el.remove()
-      return
-    }
-    
-    // Remove disallowed attributes
-    Array.from(el.attributes).forEach(attr => {
-      if (!allowedAttributes.includes(attr.name.toLowerCase()) && 
-          !attr.name.startsWith('data-')) {
-        el.removeAttribute(attr.name)
-      }
-    })
-  })
-  
-  return temp.innerHTML.trim()
-}
-
 interface BookmarksSectionProps {
-  initialBookmarks?: RaindropBookmark[]
-  enableRuntimeFetch?: boolean
-  publicCollectionId?: string
+  /** Fetched from Raindrop at build time — see src/lib/raindrop-rss.ts */
+  bookmarks: RaindropBookmark[]
 }
 
-export default function BookmarksSection({ 
-  initialBookmarks, 
-  enableRuntimeFetch = false,
-  publicCollectionId 
-}: BookmarksSectionProps) {
-  // Start with initial bookmarks (empty for runtime fetch)
-  const [bookmarks, setBookmarks] = useState<RaindropBookmark[]>(initialBookmarks || [])
-  const [loading, setLoading] = useState(enableRuntimeFetch) // Start loading if runtime fetch enabled
+export default function BookmarksSection({ bookmarks }: BookmarksSectionProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [displayCount, setDisplayCount] = useState(6)
-  const [error, setError] = useState<string | null>(null)
-
-  // Runtime fetching for public collections (optional)
-  useEffect(() => {
-    if (enableRuntimeFetch && publicCollectionId) {
-      fetchBookmarksRuntime()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // Only run once on mount
-
-  const fetchBookmarksRuntime = async () => {
-    if (!publicCollectionId) return
-    
-    setLoading(true)
-    setError(null)
-    try {
-      const fetchedBookmarks = await fetchPublicRaindrops(publicCollectionId)
-      setBookmarks(fetchedBookmarks)
-      if (fetchedBookmarks.length === 0) {
-        setError('No bookmarks found in this collection')
-      }
-    } catch (err) {
-      console.error('Failed to fetch bookmarks at runtime:', err)
-      setError('Failed to load bookmarks. Please try again later.')
-      // Fallback to mock data if fetch fails
-      setBookmarks(mockBookmarks)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleRefresh = () => {
-    if (enableRuntimeFetch && publicCollectionId) {
-      fetchBookmarksRuntime()
-    }
-  }
 
   // Get all unique tags
   const allTags = Array.from(
@@ -157,18 +70,6 @@ export default function BookmarksSection({
                 className="pl-10"
               />
             </div>
-            {enableRuntimeFetch && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefresh}
-                disabled={loading}
-                className="flex items-center gap-2"
-              >
-                <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
-                {loading ? 'Loading...' : 'Refresh'}
-              </Button>
-            )}
           </div>
 
           {/* Tag Filter */}
@@ -197,36 +98,14 @@ export default function BookmarksSection({
           )}
         </div>
 
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-12">
-            <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-blue-600 rounded-full" role="status" aria-label="loading">
-              <span className="sr-only">Loading bookmarks...</span>
-            </div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading bookmarks from Raindrop.io...</p>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && !loading && (
-          <div className="text-center py-12">
-            <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
-            {enableRuntimeFetch && (
-              <Button variant="outline" onClick={handleRefresh}>
-                Try Again
-              </Button>
-            )}
-          </div>
-        )}
-
         {/* Bookmarks Grid */}
-        {!loading && !error && (
-          <>
+        <>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {displayedBookmarks.map((bookmark) => {
-                const imageUrl = bookmark.excerpt ? extractImageFromHtml(bookmark.excerpt) : null
-                const cleanText = bookmark.excerpt ? sanitizeAndCleanHtml(bookmark.excerpt) : ''
-                
+                // Both are prepared at build time in src/lib/raindrop-rss.ts.
+                const imageUrl = bookmark.cover || null
+                const cleanText = bookmark.excerpt
+
                 return (
                   <Card key={bookmark._id} hover className="h-full overflow-hidden group hover:shadow-lg transition-all duration-300">
                     <div className="p-4">
@@ -275,7 +154,7 @@ export default function BookmarksSection({
                         {/* Description */}
                         {cleanText && (
                           <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 bookmark-content mb-4 clear-left">
-                            <div dangerouslySetInnerHTML={{ __html: cleanText }} />
+                            {cleanText}
                           </div>
                         )}
 
@@ -352,6 +231,26 @@ export default function BookmarksSection({
               </div>
             )}
 
+            {/* Feed unavailable at build time */}
+            {bookmarks.length === 0 && (
+              <div className="text-center py-12">
+                <Bookmark size={48} className="mx-auto mb-4 text-gray-400" />
+                <h3 className="text-xl font-semibold mb-2">Bookmarks unavailable</h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Browse the collection directly on{' '}
+                  <a
+                    href="https://raindrop.io/jorcineydias/dev-39074771"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    Raindrop.io
+                  </a>
+                  .
+                </p>
+              </div>
+            )}
+
             {/* No Results */}
             {filteredBookmarks.length === 0 && bookmarks.length > 0 && (
               <div className="text-center py-12">
@@ -377,8 +276,7 @@ export default function BookmarksSection({
                 </a>
               </p>
             </div>
-          </>
-        )}
+        </>
       </div>
     </section>
   )

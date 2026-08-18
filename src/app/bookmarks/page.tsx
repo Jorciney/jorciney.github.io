@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import BookmarksSection from '@/components/sections/BookmarksSection'
+import { getBookmarksFromRss } from '@/lib/raindrop-rss'
 
 export const metadata: Metadata = {
   title: 'Bookmarks - Jorciney Dias Chaveiro',
@@ -7,17 +8,14 @@ export const metadata: Metadata = {
   keywords: 'bookmarks, resources, articles, tools, development, programming, technology',
 }
 
-export default function BookmarksPage() {
-  // Your public collection ID from https://raindrop.io/jorcineydias/dev-39074771
-  const publicCollectionId = '39074771'
-  
+export default async function BookmarksPage() {
+  // Fetched at build time — the browser cannot reach Raindrop directly because
+  // the feed sends no CORS headers. See src/lib/raindrop-rss.ts.
+  const bookmarks = await getBookmarksFromRss()
+
   return (
     <div className="pt-16">
-      <BookmarksSection 
-        initialBookmarks={[]} // Start with empty, will fetch at runtime
-        enableRuntimeFetch={true} // Enable runtime fetching for public collection
-        publicCollectionId={publicCollectionId}
-      />
+      <BookmarksSection bookmarks={bookmarks} />
     </div>
   )
 }

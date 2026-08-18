@@ -1,161 +1,86 @@
-# 🌧️ Raindrop.io Bookmarks Integration Setup
+# 🌧️ Raindrop.io Bookmarks Integration
 
-This guide will help you connect your Raindrop.io bookmarks to your portfolio website.
+The `/bookmarks` page shows the bookmarks from the public Raindrop collection
+[jorcineydias/dev-39074771](https://raindrop.io/jorcineydias/dev-39074771).
 
-## 🚀 Quick Setup
+## How it works
 
-### Step 1: Get Your API Token
+This site is a static export (`output: 'export'` in `next.config.mjs`), so there
+is no server running at request time. The bookmarks are therefore fetched
+**during `next build`**, in `src/lib/raindrop-rss.ts`, and baked into the
+generated HTML.
 
-1. **Go to Raindrop.io Settings**
-   - Visit: https://app.raindrop.io/settings/integrations
-   - Sign in to your Raindrop.io account
-
-2. **Create a New App**
-   - Click "Create new app"
-   - **App Name**: `Personal Portfolio` (or any name you prefer)
-   - **Description**: `Personal website bookmarks integration`
-   - **Redirect URI**: `http://localhost:3008` (or your domain)
-   - Click "Create"
-
-3. **Copy Your Test Token**
-   - After creating the app, you'll see a "Test Token"
-   - Copy this token (it should be 36 characters long)
-
-### Step 2: Configure Your Environment
-
-1. **Create .env file**
-   ```bash
-   cp .env.example .env
-   ```
-
-2. **Add Your Token**
-   ```env
-   RAINDROP_TOKEN=your_36_character_test_token_here
-   ```
-
-3. **Optional: Enable Debug Mode**
-   ```env
-   DEBUG_RAINDROP=true
-   ```
-
-### Step 3: Test the Integration
-
-1. **Restart Your Development Server**
-   ```bash
-   npm run dev
-   ```
-
-2. **Visit the Bookmarks Page**
-   - Go to: http://localhost:3008/bookmarks
-   - Check the browser console for any messages
-
-## 🔧 Troubleshooting
-
-### Issue: Still Seeing Mock Data
-
-**Possible Causes:**
-
-1. **Token Not Set**
-   - ✅ Verify `.env` file exists and has `RAINDROP_TOKEN=...`
-   - ✅ Make sure there are no spaces around the `=` sign
-   - ✅ Restart the development server after adding the token
-
-2. **Invalid Token**
-   - ✅ Token should be exactly 36 characters long
-   - ✅ Make sure you're using the "Test Token" from your created app
-   - ✅ Don't use quotes around the token in the .env file
-
-3. **No Bookmarks in Account**
-   - ✅ Add some bookmarks to your Raindrop.io account
-   - ✅ Try visiting different collections (not just "Unsorted")
-
-### Issue: API Errors (401 Unauthorized)
-
-**Solutions:**
-
-1. **Recreate the App**
-   - Go back to https://app.raindrop.io/settings/integrations
-   - Delete the old app and create a new one
-   - Copy the new test token
-
-2. **Check Token Format**
-   - Token should look like: `b1234567-89ab-cdef-0123-456789abcdef`
-   - No extra characters or spaces
-
-### Issue: Network Errors
-
-**Check:**
-- ✅ You're connected to the internet
-- ✅ Raindrop.io is accessible: https://raindrop.io
-- ✅ No firewall blocking the API calls
-
-## 🔍 Debug Mode
-
-Enable detailed logging:
-
-```env
-DEBUG_RAINDROP=true
+```
+next build ──▶ fetch https://bg.raindrop.io/rss/public/39074771
+           ──▶ parse RSS into RaindropBookmark[]
+           ──▶ src/app/bookmarks/page.tsx (server component)
+           ──▶ BookmarksSection renders static HTML
 ```
 
-This will show:
-- 🔍 API request attempts
-- 🔑 Token validation
-- 📖 Sample bookmark data
-- 💡 Helpful troubleshooting tips
+No API token is required — the collection is public and the feed is open.
 
-## 📊 Alternative: Static Export
+## Why not fetch from the browser?
 
-If the API integration isn't working, you can use static data:
+That was the previous approach and it silently failed. The Raindrop RSS endpoint
+responds fine, but it does **not** send an `Access-Control-Allow-Origin` header,
+so the browser blocks any cross-origin `fetch()` from `jorciney.dev`. The page
+ended up with an empty list.
 
-1. **Export Your Bookmarks**
-   - Go to: https://app.raindrop.io/settings/backups
-   - Click "Create backup"
-   - Download the JSON file
+You can confirm the missing header at any time:
 
-2. **Update Mock Data**
-   - Open `src/lib/raindrop.ts`
-   - Replace the `mockBookmarks` array with your exported data
-   - Modify the structure to match the `RaindropBookmark` interface
-
-## 📝 Expected Console Messages
-
-**✅ Success:**
-```
-✅ Successfully fetched 25 bookmarks from Raindrop.io
+```bash
+curl -sI https://bg.raindrop.io/rss/public/39074771 | grep -i access-control
+# (no output — no CORS header)
 ```
 
-**ℹ️ Fallback:**
+Fetching at build time avoids the problem entirely, since CORS is a browser
+restriction and does not apply server-side.
+
+## Updating the bookmarks on the site
+
+Bookmarks are a build-time snapshot. After adding bookmarks in Raindrop, push a
+commit (or re-run the Pages deploy) and the new build picks them up.
+
+## Changing the collection
+
+The collection must be **public** (Raindrop → collection → Share → "Anyone with
+the link"). Then update the ID in `src/lib/raindrop-rss.ts`:
+
+```ts
+export const PUBLIC_COLLECTION_ID = '39074771'
 ```
-📚 No RAINDROP_TOKEN found - using mock data for demonstration
+
+The ID is the number at the end of the collection URL.
+
+## What the feed provides
+
+| Field | Source |
+|---|---|
+| `title` | `<title>` |
+| `link` | `<link>` |
+| `excerpt` | `<description>`, with markup stripped |
+| `cover` | the `<img>` inside `<description>` |
+| `tags` | `<category>` elements |
+| `createdDate` | `<pubDate>` |
+
+Raindrop's private notes are not exposed in the public feed, so `note` is always
+empty.
+
+## Troubleshooting
+
+Run a build and check the log — the fetch reports what it got:
+
+```bash
+npm run build
+# [raindrop] Loaded 29 bookmarks at build time
 ```
 
-**🚫 Auth Error:**
+If the feed is unreachable, the build logs a warning, keeps going, and the page
+renders a "Bookmarks unavailable" state that links to the collection directly. A
+flaky network never breaks the build.
+
+If you see 0 bookmarks, verify the collection is still public:
+
+```bash
+curl -s https://bg.raindrop.io/rss/public/39074771 | grep -c '<item>'
 ```
-🚫 Raindrop API authentication failed - using mock data
-```
-
-## 🆘 Still Having Issues?
-
-1. **Check Browser Developer Tools**
-   - Open DevTools (F12)
-   - Look at Console and Network tabs
-   - Check for any error messages
-
-2. **Verify Your Setup**
-   - Ensure you have bookmarks in your Raindrop.io account
-   - Try accessing your bookmarks directly at https://app.raindrop.io
-
-3. **Test Token Manually**
-   - Visit: https://api.raindrop.io/rest/v1/user?test_token=YOUR_TOKEN
-   - You should see your user information (not an error)
-
-## 🎯 Final Notes
-
-- The integration gracefully falls back to mock data if the API fails
-- Mock data is curated with developer-focused bookmarks
-- The bookmarks section will work perfectly even without the API
-- All search, filtering, and UI features work with both real and mock data
-
----
-
-**Need more help?** Check the troubleshooting comments in `src/lib/raindrop.ts`
