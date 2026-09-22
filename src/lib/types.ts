@@ -1,6 +1,8 @@
 export interface Project {
   id: string
   title: string
+  /** Owner's role on the project, e.g. "Creator" or "Co-founder". Shown under the title when set. */
+  role?: string
   description: string
   icon: string
   logo?: string

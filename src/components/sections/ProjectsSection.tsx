@@ -36,7 +36,14 @@ export default function ProjectsSection() {
                   ) : (
                     <span className="text-3xl">{project.icon}</span>
                   )}
-                  <CardTitle className="text-xl">{project.title}</CardTitle>
+                  <div className="min-w-0">
+                    <CardTitle className="text-xl">{project.title}</CardTitle>
+                    {project.role && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                        {project.role}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <CardDescription>
                   {project.description}
