@@ -29,6 +29,35 @@ export const projects: Project[] = [
     isClientProject: false
   },
   {
+    id: 'clever-marketer',
+    title: 'CleverMarketer',
+    role: 'Creator',
+    description: 'AI marketing platform that plans, creates, approves and publishes content for every business you own, then measures what actually works with attribution that counts customers, not likes. Runs a continuous Teach → Plan → Create → Approve → Publish → Measure → Learn loop across Instagram, Facebook, LinkedIn, TikTok, blog and email, plus Meta and Google Ads. Built by the makers of CleverBooking and Salunas; currently in early access.',
+    icon: '📣',
+    logo: '/assets/projects/clever-marketer.png',
+    technologies: ['SaaS', 'AI Marketing', 'Multi-business', 'Social Publishing', 'Meta & Google Ads', 'Attribution'],
+    links: [
+      { label: 'Visit Website', url: 'https://clever-marketer.com/', type: 'primary' }
+    ],
+    featured: true,
+    isClientProject: false
+  },
+  {
+    id: 'belboek',
+    title: 'Belboek',
+    role: 'Co-founder',
+    description: 'All-in-one AI platform for Belgian accountants that replaces a fragmented software stack: bookkeeping, tax, payroll and company law in a single workspace with 60+ integrated modules. Built around Belgian regulation and available in Dutch, French, English and German. Currently in development with an open waitlist.',
+    icon: '📒',
+    logo: '/assets/projects/belboek.png',
+    technologies: ['SaaS', 'Accounting', 'AI Platform', 'Belgian Tax & Payroll', '60+ Modules', 'i18n (4 languages)'],
+    links: [
+      { label: 'Visit Website', url: 'https://belboek.be/', type: 'primary' },
+      { label: 'Open the App', url: 'https://app.belboek.be/', type: 'secondary' }
+    ],
+    featured: true,
+    isClientProject: false
+  },
+  {
     id: 'kitchen-3d',
     title: 'Interactive 3D Kitchen Designer',
     description: 'A real-time, browser-based 3D kitchen and living-room configurator built from scratch with Three.js. Features switchable layouts, live material/finish swatches, clickable measurements, walk-through navigation, and physically-based rendering (ACES tone mapping, IBL reflections).',
